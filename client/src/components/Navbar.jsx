@@ -27,7 +27,7 @@ const Navbar = () => {
           </NavLink>
         </div>
         {/* Middle Logo */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 font-bold text-xl text-green-600">
+        <div className="absolute left-1/2 transform -translate-x-1/2 font-bold text-2xl text-green-600">
           FundForward
         </div>
         {/* Right Links */}
