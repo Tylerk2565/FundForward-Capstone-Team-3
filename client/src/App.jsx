@@ -7,17 +7,13 @@ import QuizPage from "../src/pages/QuizPage";
 
 const App = () => {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <div className="flex-grow">
-          <Routes>
-            <Route path="/quiz" element={<QuizPage />} />
-          </Routes>
-        </div>
-        <Footer />
-      </div>
-    </Router>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 };
 
