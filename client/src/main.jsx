@@ -5,6 +5,6 @@ import About from "./pages/About.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <About />
+    <App />
   </StrictMode>
 );
