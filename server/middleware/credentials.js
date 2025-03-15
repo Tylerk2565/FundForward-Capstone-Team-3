@@ -1,6 +1,6 @@
 import allowedOrigins from '../config/allowedOrigins';
 
-export const credentials = (req, res, next) => {
+const credentials = (req, res, next) => {
     const origin = req.headers.origin;
 
     if(allowedOrigins.includes(origin)) {
@@ -8,3 +8,5 @@ export const credentials = (req, res, next) => {
     }
     next()
 }
+
+export default credentials;

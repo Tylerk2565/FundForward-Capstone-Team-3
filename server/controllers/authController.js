@@ -11,8 +11,6 @@ const handleLogin = async (req, res) => {
 
     const connection = await pool.getConnection();
 
-    if(!user || !pwd) return res.status(400).json({ 'message': 'username and password are required.'})
-
     try {
         const [userRows] = await connection
     .query("SELECT id, username, password FROM users WHERE username = ?", [user]);
@@ -63,8 +61,14 @@ const handleLogin = async (req, res) => {
         );
         // saving refreshToken w/ current user
 
-        const [savingRefreshToken] = await connection
-      .query("INSERT INTO refresh_tokens (refresh_token, user_id) VALUES (?, ?)", [refreshToken, foundUser.id]);
+        const [savingRefreshToken] = await connection.query(
+            `INSERT INTO refresh_tokens (user_id, refresh_token)
+             VALUES (?, ?)
+             ON DUPLICATE KEY UPDATE refresh_token = VALUES(refresh_token)`,
+            [foundUser.id, refreshToken]
+        );
+
+        console.log(savingRefreshToken)
 
         res.cookie('jwt', refreshToken, { httpOnly: true, sameSite:'None', maxAge: 24 * 60 * 60 * 1000})
 
