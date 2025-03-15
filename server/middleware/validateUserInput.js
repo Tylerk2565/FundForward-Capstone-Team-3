@@ -1,4 +1,4 @@
-export const validateUserInput = (schema) => (req, res, next) => {
+const validateUserInput = (schema) => (req, res, next) => {
     const { error, value } = schema.validate(req.body, { abortEarly: false });
   
     if (error) {
@@ -7,5 +7,7 @@ export const validateUserInput = (schema) => (req, res, next) => {
   
     req.body = value; // Use the sanitized data
     next();
-  };
+};
+
+export default validateUserInput;
   
