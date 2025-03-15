@@ -1,16 +1,20 @@
+import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
 import axios from "axios";
 import cors from "cors";
 import mysql from "mysql2";
-import dotenv from "dotenv";
 import corsOptions from "./config/corsOptions.js";
 import cookieParser from "cookie-parser";
 import registerRoute from './routes/register.js'
 import authRoute from './routes/auth.js'
 import apiRoute from './routes/api/fundraiser.js'
+import logoutRoute from './routes/logout.js'
 import errorHandler from "./middleware/errorHandler.js";
+import refreshRoute from './routes/refresh.js'
+import pool from './config/dbConn.js'
+import verifyJWT from "./middleware/verifyJWT.js";
 
 const PORT = process.env.PORT || 3000;
 
@@ -25,24 +29,25 @@ app.use(cookieParser());
 app.use('/register', registerRoute)
 app.use('/auth', authRoute)
 app.use('/api', apiRoute)
+app.use('/refresh', refreshRoute)
+app.use('/logout', logoutRoute)
 
 app.use(errorHandler);
 
-// const connection = mysql.createConnection({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_NAME,
-// });
+async function connectDB() {
+  try {
+      // Get a connection from the pool
+      const connection = await pool.getConnection();
+      console.log('Connected to MySQL Database');
 
-// connection.connect((err) => {
-//   if (err) {
-//     console.error("Error connecting to the database:", err);
-//     process.exit(1);
-//   } else {
-//     console.log("Connected to the database");
-//   }
-// });
+      // Release connection back to the pool (DON'T end it)
+      connection.release();
+  } catch (err) {
+      console.error('Database connection error:', err);
+  }
+}
+
+connectDB();
 
 app.all('*', (req, res) => {
   res.status(404)

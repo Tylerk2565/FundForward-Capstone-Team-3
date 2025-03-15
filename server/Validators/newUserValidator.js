@@ -1,6 +1,6 @@
 import Joi from "joi"
 
-export const userSchema = Joi.object({
+const userSchema = Joi.object({
     user: Joi.string()
       .trim()                               // Removes leading/trailing spaces
       .alphanum()                           // Ensures only letters/numbers
@@ -27,3 +27,5 @@ export const userSchema = Joi.object({
     lastname: Joi.string().trim().replace(/[<>\/\\]/g, '').required(),
     }
 )  
+
+export default userSchema;
