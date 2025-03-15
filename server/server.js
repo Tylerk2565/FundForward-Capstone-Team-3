@@ -20,15 +20,15 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-app.use(cors(corsOptions));
+app.use(cors());
 // app.use(express.static(path.join(__dirname, "../client/dist")));
 app.use(express.urlencoded({ extended:false }))
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/api', apiRoute)
 app.use('/register', registerRoute)
 app.use('/auth', authRoute)
+app.use('/api', apiRoute)
 app.use('/refresh', refreshRoute)
 app.use('/logout', logoutRoute)
 
