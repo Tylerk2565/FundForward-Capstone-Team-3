@@ -4,6 +4,8 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import QuizPage from "../src/pages/QuizPage";
+import Profile from "./pages/Profile";
+import Register from "./pages/Register";
 
 const App = () => {
   return (
@@ -12,7 +14,10 @@ const App = () => {
         <Navbar />
         <div className="flex-grow">
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </div>
         <Footer />
