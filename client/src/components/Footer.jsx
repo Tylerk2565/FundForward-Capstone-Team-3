@@ -5,8 +5,8 @@ import InstagramIcon from "./icons/InstagramIcon";
 
 const Footer = () => {
   return (
-    <footer className="w-full h-20 border-t border-gray-300 mt-auto">
-      <div className="max-w-8xl h-20 mx-auto px-6 flex justify-between items-center relative">
+    <footer className="w-full h-16 border-t border-gray-300 mt-auto z-50">
+      <div className="max-w-8xl h-16 mx-auto px-6 flex justify-between items-center relative">
         {/* Left Copyright */}
         <div className="text-gray-600">
           © {new Date().getFullYear()} FundForward. All rights reserved.
