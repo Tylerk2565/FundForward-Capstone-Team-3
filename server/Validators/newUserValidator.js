@@ -23,8 +23,8 @@ const userSchema = Joi.object({
       .lowercase()                          // Normalizes email
       .required(),
   
-    firstname: Joi.string().trim().replace(/[<>\/\\]/g, '').required(),
-    lastname: Joi.string().trim().replace(/[<>\/\\]/g, '').required(),
+    firstname: Joi.string().trim().pattern(/^[A-Za-z]+$/).required(),
+    lastname: Joi.string().trim().pattern(/^[A-Za-z]+$/).required(),
     }
 )  
 
