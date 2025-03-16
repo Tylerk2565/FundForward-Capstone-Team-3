@@ -16,7 +16,7 @@ const handleLogin = async (req, res) => {
     .query("SELECT id, username, password FROM users WHERE username = ?", [user]);
     console.log(userRows);
 
-    if(userRows.length === 0) return res.sendStatus(401);
+    if(userRows.length === 0) return res.status(401).send({"error": "Username or password are invalid"});
 
     const foundUser = userRows[0];
     console.log(foundUser);
@@ -37,7 +37,7 @@ const handleLogin = async (req, res) => {
     const match = await bcrypt.compare(pwd, foundUser.password);
 
     if (!match) {
-        return res.status(401).json({ message: 'Invalid username or password' });
+        return res.status(401).json({ "error": 'Invalid username or password' });
     }
 
 
