@@ -59,8 +59,7 @@ const Quiz = () => {
   };
 
   const getResultMessage = () => {
-    // implement this later
-    return true;
+    if (recommendation) return `Your result is ${recommendation}`;
   };
 
   const getUser = () => {

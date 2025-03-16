@@ -1,7 +1,7 @@
 import express from 'express'
-import fundraiserController from '../../controllers/api/fundraiserController.js'
+import handleFundApi from '../../controllers/api/fundraiserController.js'
 const router = express.Router()
 
-router.post('/fundraiser', fundraiserController.handleFundApi);
+router.get('/fundraiser', handleFundApi);
 
 export default router;
