@@ -11,14 +11,12 @@ const handleLogin = async (req, res) => {
 
     const connection = await pool.getConnection();
 
-    if(!user || !pwd) return res.status(400).json({ 'message': 'username and password are required.'})
-
     try {
         const [userRows] = await connection
     .query("SELECT id, username, password FROM users WHERE username = ?", [user]);
     console.log(userRows);
 
-    if(userRows.length === 0) return res.sendStatus(401);
+    if(userRows.length === 0) return res.status(401).send({"error": "Username or password are invalid"});
 
     const foundUser = userRows[0];
     console.log(foundUser);
@@ -39,7 +37,7 @@ const handleLogin = async (req, res) => {
     const match = await bcrypt.compare(pwd, foundUser.password);
 
     if (!match) {
-        return res.status(401).json({ message: 'Invalid username or password' });
+        return res.status(401).json({ "error": 'Invalid username or password' });
     }
 
 
@@ -63,8 +61,14 @@ const handleLogin = async (req, res) => {
         );
         // saving refreshToken w/ current user
 
-        const [savingRefreshToken] = await connection
-      .query("INSERT INTO refresh_tokens (refresh_token, user_id) VALUES (?, ?)", [refreshToken, foundUser.id]);
+        const [savingRefreshToken] = await connection.query(
+            `INSERT INTO refresh_tokens (user_id, refresh_token)
+             VALUES (?, ?)
+             ON DUPLICATE KEY UPDATE refresh_token = VALUES(refresh_token)`,
+            [foundUser.id, refreshToken]
+        );
+
+        console.log(savingRefreshToken)
 
         res.cookie('jwt', refreshToken, { httpOnly: true, sameSite:'None', maxAge: 24 * 60 * 60 * 1000})
 

@@ -20,15 +20,15 @@ const handleNewUser = async (req, res) => {
     .query("SELECT id FROM users WHERE username = ?", [user]);
 
     if (dupeEmail.length > 0 && dupeUser.length > 0) {
-        return res.status(409).json({ "message": "Email and Username are taken" });
+        return res.status(409).json({ "error": "Email and Username are taken" });
     }
     
     if (dupeEmail.length > 0) {
-        return res.status(409).json({ "message": "Email is taken" });
+        return res.status(409).json({ "error": "Email is taken" });
     }
     
     if (dupeUser.length > 0) {
-        return res.status(409).json({ "message": "Username is taken" });
+        return res.status(409).json({ "error": "Username is taken" });
     }    
 
     // encrypt password
