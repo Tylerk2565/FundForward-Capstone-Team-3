@@ -73,6 +73,14 @@ const Quiz = () => {
         <h1 className="text-2xl font-bold text-green-600 mb-4 text-center">
           Simple Quiz
         </h1>
+        <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
+          <div
+            className="bg-blue-500 h-2 rounded-full"
+            style={{
+              width: `${((currentQuestion + 1) / quizQuestions.length) * 100}%`,
+            }}
+          ></div>
+        </div>
         <h2 className="text-lg font-semibold mb-4 text-center">
           {quizQuestions[currentQuestion].question}
         </h2>
