@@ -8,25 +8,27 @@ import QuizPage from "../src/pages/QuizPage";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Volunteer from "./pages/Volunteer";
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <div className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
+      <Router>
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
+          <div className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
             <Route path="/fundraiser" element={<Fundraisers />} />
-            <Route path="/quiz" element={<QuizPage />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/register" element={<Register />} />
+              <Route path="/quiz" element={<QuizPage />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/register" element={<Register />} />
             <Route path="/volunteer" element={<Volunteer />} />
-          </Routes>
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </Router>
+      </Router>
   );
 };
 
