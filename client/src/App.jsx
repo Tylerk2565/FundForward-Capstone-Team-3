@@ -7,8 +7,7 @@ import Fundraisers from "./pages/Fundraisers";
 import QuizPage from "./pages/QuizPage";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
-import Profile from "./pages/Profile";
-
+import Login from "./pages/Login";
 const App = () => {
   return (
     <Router>
@@ -21,6 +20,7 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/register" element={<Register />} />
             <Route path="/fundraiser" element={<Fundraisers />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </div>
         <Footer />
