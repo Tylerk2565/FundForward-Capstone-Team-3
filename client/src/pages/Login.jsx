@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Login = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,7 +19,7 @@ const Register = () => {
         "http://localhost:3000/auth",
         {
           user,
-          pwd: password
+          pwd: password,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -58,7 +58,7 @@ const Register = () => {
             placeholder="Username"
             className="w-full p-2 border rounded"
             value={user}
-            onChange={(e) => setUser( e.target.value)}
+            onChange={(e) => setUser(e.target.value)}
           />
 
           <input
@@ -87,4 +87,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

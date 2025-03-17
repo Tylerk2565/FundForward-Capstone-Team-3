@@ -1,6 +1,5 @@
 import Button from "../components/ButtonNavigator";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 // Dummy project data
 const dummyProjects = [

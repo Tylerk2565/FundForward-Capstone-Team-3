@@ -110,7 +110,7 @@ const Register = () => {
       alert("Registration successful! You can now log in.");
       navigate("/login");
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       if (!err?.response) {
         setError("No server response");
         //error 409 means username or email already exists
