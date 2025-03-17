@@ -1,6 +1,8 @@
 import Button from "../components/ButtonNavigator";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import LoginModal from "../components/LoginModal";
 
 // Dummy project data
 const dummyProjects = [
@@ -50,6 +52,22 @@ const dummyProjects = [
 
 const Home = () => {
   const [projects] = useState(dummyProjects);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const navigate = useNavigate();
+  // const { isAuthenticated } = useAuth();
+
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      navigate("/quiz");
+    } else {
+      setShowLoginModal(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowLoginModal(false);
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Hero Section */}
@@ -105,7 +123,11 @@ const Home = () => {
             impact today.
           </p>
           <div className="mt-6">
-            <Button name={"Get Started"} routeName={"quiz"} />
+            <Button
+              name={"Get Started"}
+              routeName={"quiz"}
+              onClick={handleGetStarted}
+            />
           </div>
         </section>
       </section>
@@ -177,6 +199,13 @@ const Home = () => {
           </div>
         </section>
       </div>
+
+      {/* Login Modal */}
+      {showLoginModal && (
+        <div className="fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center">
+          <LoginModal onClose={handleCloseModal} />
+        </div>
+      )}
     </div>
   );
 };
