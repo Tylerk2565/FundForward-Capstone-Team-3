@@ -16,7 +16,7 @@ import refreshRoute from './routes/refresh.js'
 import pool from './config/dbConn.js'
 import verifyJWT from "./middleware/verifyJWT.js";
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
@@ -34,20 +34,20 @@ app.use('/logout', logoutRoute)
 
 app.use(errorHandler);
 
-async function connectDB() {
-  try {
-      // Get a connection from the pool
-      const connection = await pool.getConnection();
-      console.log('Connected to MySQL Database');
+// async function connectDB() {
+//   try {
+//       // Get a connection from the pool
+//       const connection = await pool.getConnection();
+//       console.log('Connected to MySQL Database');
 
-      // Release connection back to the pool (DON'T end it)
-      connection.release();
-  } catch (err) {
-      console.error('Database connection error:', err);
-  }
-}
+//       // Release connection back to the pool (DON'T end it)
+//       connection.release();
+//   } catch (err) {
+//       console.error('Database connection error:', err);
+//   }
+// }
 
-connectDB();
+//connectDB();
 
 app.all('*', (req, res) => {
   res.status(404)
