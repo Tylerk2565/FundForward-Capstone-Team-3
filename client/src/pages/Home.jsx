@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import LoginModal from "../components/LoginModal";
+import Video from "../assets/Video.mp4";
 
 // Dummy project data
 const dummyProjects = [
@@ -71,18 +72,28 @@ const Home = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Hero Section */}
-      <section className="bg-[#009895] text-white text-center py-20 px-6">
-        <h1 className="text-4xl font-bold">
-          Empower Communities with FundForward
-        </h1>
-        <p className="mt-4 text-lg max-w-3xl mx-auto">
-          {" "}
-          Many local projects and nonprofit initiatives struggle to gain
-          visibility and secure the necessary funding and volunteer support,
-          making it difficult for individuals to discover and contribute to
-          causes that align with their interests and values. Explore local
-          projects, volunteer, and contribute to meaningful causes.{" "}
-        </p>
+      <section className="relative text-black text-center py-20 px-6 flex items-center justify-center">
+        <video
+          autoPlay
+          loop
+          muted
+          className="absolute inset-0 w-full h-full object-cover opacity-50"
+        >
+          <source src={Video} type="video/mp4" />
+        </video>
+        <div className="relative z-10 max-w-3xl">
+          <h1 className="text-5xl font-bold leading-tight">
+            Empower Communities with FundForward
+          </h1>
+          <p className="mt-4 text-lg">
+            Many local projects and nonprofit initiatives struggle to gain
+            visibility and secure funding. Discover meaningful causes,
+            volunteer, and make an impact today.
+          </p>
+          <div className="mt-6">
+            <Button name={"Get Started"} routeName={"quiz"} />
+          </div>
+        </div>
       </section>
       {/* Quiz Section */}
       <section className="py-12 px-6 max-w-4xl mx-auto">
@@ -170,11 +181,11 @@ const Home = () => {
               <div
                 key={project.id}
                 className={`bg-white shadow-lg rounded-lg p-4 relative transform transition-transform hover:scale-105 hover:shadow-xl
-                ${
-                  index % 2 === 0
-                    ? "translate-x-4 -rotate-2"
-                    : "-translate-x-4 rotate-2"
-                }`}
+               ${
+                 index % 2 === 0
+                   ? "translate-x-4 -rotate-2"
+                   : "-translate-x-4 rotate-2"
+               }`}
                 style={{ boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)" }}
               >
                 <img

@@ -9,6 +9,8 @@ import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import PersistLogin from "./components/PersistLogin";
+import Contact from "./pages/Contact";
+import Results from "./pages/Results";
 
 const App = () => {
   return (
@@ -19,15 +21,17 @@ const App = () => {
           <Routes>
 
             <Route path="/" element={<Home />} />
+            <Route path="/fundraiser" element={<Fundraisers />} />
             <Route path="/quiz" element={<QuizPage />} />
-            
-            <Route element={<PersistLogin/>}>
+
+            <Route path="/results" element={<Results />} />
+            <Route element={<PersistLogin />}>
               <Route path="/profile" element={<Profile />} />
             </Route>
-            
+
             <Route path="/register" element={<Register />} />
-            <Route path="/fundraiser" element={<Fundraisers />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </div>
         <Footer />
