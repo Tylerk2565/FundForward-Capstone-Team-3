@@ -1,12 +1,24 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+
 
 const Login = () => {
+  const { setAuth, auth } = useAuth();
+
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("here's the auth bois", auth);
+    if (auth.accessToken) {
+      //redirect to home page
+      navigate("/");
+    }
+  }, auth);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,20 +29,23 @@ const Login = () => {
     try {
       const res = await axios.post(
         "http://localhost:3000/auth",
-        {
+        JSON.stringify({
           user,
           pwd: password,
-        },
+        }),
         {
           headers: { "Content-Type": "application/json" },
-          Credentials: true,
+          withCredentials: true,
         }
       );
-      console.log(res.data);
-      console.log(res.data.accessToken);
-      console.log(JSON.stringify(res));
+      console.log(JSON.stringify(res?.data));
+      const accessToken = res?.data.accessToken;
+      const roles = res?.data.roles;
+      console.log(roles);
+      setAuth({ user, password, roles, accessToken });
+      setUser("");
+      setPassword("");
 
-      alert("Login successful, taking you too home");
       navigate("/");
     } catch (err) {
       console.log(err);
