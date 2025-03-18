@@ -16,7 +16,7 @@ import refreshRoute from './routes/refresh.js'
 import pool from './config/dbConn.js'
 import verifyJWT from "./middleware/verifyJWT.js";
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
