@@ -12,6 +12,7 @@ import PersistLogin from "./components/PersistLogin";
 import Contact from "./pages/Contact";
 import Results from "./pages/Results";
 import Volunteer from "./pages/Volunteer";
+import About from "./pages/About"
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
             <Route path="/fundraiser" element={<Fundraisers />} />
             <Route path="/volunteer" element={<Volunteer />} />
             <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/about" element={<About />} />
 
             <Route path="/results" element={<Results />} />
             <Route element={<PersistLogin />}>
