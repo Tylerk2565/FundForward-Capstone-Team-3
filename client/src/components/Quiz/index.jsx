@@ -42,12 +42,9 @@ const Quiz = () => {
     // Sends a post request when the last question is answered
     if (currentQuestion === quizQuestions.length - 1) {
       try {
-        const response = await axios.post(
-          "http://localhost:3000/quiz-results",
-          {
-            scores: finalScores,
-          }
-        );
+        const response = await axios.post("http://localhost:3000/results", {
+          scores: finalScores,
+        });
         setRecommendation(response.data.recommendation);
         setSubmitted(true);
       } catch (err) {

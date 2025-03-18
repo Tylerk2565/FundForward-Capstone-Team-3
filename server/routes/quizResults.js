@@ -4,7 +4,7 @@ import categories from "../../client/src/components/Quiz/categories.js";
 
 const router = express.Router();
 
-router.post("/quiz-results", verifyJWT, (req, res) => {
+router.post("/results", verifyJWT, (req, res) => {
   try {
     const { scores } = req.body;
 
