@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-app.use(cors());
+app.use(cors(corsOptions));
 // app.use(express.static(path.join(__dirname, "../client/dist")));
 app.use(express.urlencoded({ extended:false }))
 app.use(express.json());
