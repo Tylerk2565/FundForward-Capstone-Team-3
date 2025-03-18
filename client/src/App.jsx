@@ -8,6 +8,8 @@ import QuizPage from "./pages/QuizPage";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import PersistLogin from "./components/PersistLogin";
+
 const App = () => {
   return (
     <Router>
@@ -15,9 +17,14 @@ const App = () => {
         <Navbar />
         <div className="flex-grow">
           <Routes>
+
             <Route path="/" element={<Home />} />
             <Route path="/quiz" element={<QuizPage />} />
-            <Route path="/profile" element={<Profile />} />
+            
+            <Route element={<PersistLogin/>}>
+              <Route path="/profile" element={<Profile />} />
+            </Route>
+            
             <Route path="/register" element={<Register />} />
             <Route path="/fundraiser" element={<Fundraisers />} />
             <Route path="/login" element={<Login />} />
