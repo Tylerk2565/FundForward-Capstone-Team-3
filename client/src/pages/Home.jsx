@@ -7,8 +7,9 @@ import Video from "../assets/Video.mp4";
 import useAuth from "../hooks/useAuth";
 
 const Home = () => {
-  const [projects] = useState(dummyProjects);
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { auth } = useAuth();
 
