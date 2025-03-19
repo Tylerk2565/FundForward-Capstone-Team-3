@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import Results from "./pages/Results";
 import Volunteer from "./pages/Volunteer";
 import { LoadScript } from "@react-google-maps/api";
+import About from "./pages/About"
 
 const App = () => {
   const libraryArray = ["places"];
@@ -29,6 +30,7 @@ const App = () => {
               <Route path="/fundraiser" element={<Fundraisers />} />
               <Route path="/volunteer" element={<Volunteer />} />
               <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/about" element={<About />} />
 
               <Route path="/results" element={<Results />} />
               <Route element={<PersistLogin />}>
