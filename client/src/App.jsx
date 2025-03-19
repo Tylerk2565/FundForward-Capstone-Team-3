@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import "./App.css";
 import Navbar from "./components/Navbar";
@@ -11,6 +16,16 @@ import Login from "./pages/Login";
 import PersistLogin from "./components/PersistLogin";
 import Contact from "./pages/Contact";
 import Results from "./pages/Results";
+
+// const AdminRoute = ({ element, ...rest }) => {
+//   const { user } = useAuth();
+
+//   return user?.role === "admin" ? (
+//     <Route {...rest} element={element} />
+//   ) : (
+//     <Navigate to="/" />
+//   );
+// };
 
 const App = () => {
   return (
@@ -32,6 +47,10 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/contact" element={<Contact />} />
+            {/* <Route
+              path="/admin/messages"
+              element={<AdminRoute element={<AdminMessages />} />}
+            /> */}
           </Routes>
         </div>
         <Footer />
