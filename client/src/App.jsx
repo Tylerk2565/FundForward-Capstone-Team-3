@@ -16,6 +16,7 @@ import Login from "./pages/Login";
 import PersistLogin from "./components/PersistLogin";
 import Contact from "./pages/Contact";
 import Results from "./pages/Results";
+import Volunteer from "./pages/Volunteer";
 
 // const AdminRoute = ({ element, ...rest }) => {
 //   const { user } = useAuth();
@@ -34,7 +35,6 @@ const App = () => {
         <Navbar />
         <div className="flex-grow">
           <Routes>
-
             <Route path="/" element={<Home />} />
             <Route path="/fundraiser" element={<Fundraisers />} />
             <Route path="/quiz" element={<QuizPage />} />
@@ -47,6 +47,8 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/volunteer" element={<Volunteer />} />
+
             {/* <Route
               path="/admin/messages"
               element={<AdminRoute element={<AdminMessages />} />}
@@ -60,4 +62,3 @@ const App = () => {
 };
 
 export default App;
-
