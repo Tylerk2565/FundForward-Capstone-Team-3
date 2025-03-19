@@ -15,10 +15,15 @@ import errorHandler from "./middleware/errorHandler.js";
 import refreshRoute from "./routes/refresh.js";
 import pool from "./config/dbConn.js";
 import verifyJWT from "./middleware/verifyJWT.js";
+import getFeaturedFundraiser from "./controllers/api/getFeaturedFundraiser.js";
+import handleFundApi from "./controllers/api/fundraiserController.js";
+// import Contact from "../client/src/pages/Contact.jsx";
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+
+app.use(cors(corsOptions));
 
 // app.use(express.static(path.join(__dirname, "../client/dist")));
 app.use(express.urlencoded({ extended: false }));
@@ -33,7 +38,7 @@ app.use("/logout", logoutRoute);
 app.get("/featured-fundraisers", getFeaturedFundraiser);
 app.post("/results", handleFundApi);
 app.use(errorHandler);
-app.use("/contact", contactRoute);
+// app.use("/contact"); //contactRoute
 
 app.use(errorHandler);
 
