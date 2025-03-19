@@ -16,7 +16,7 @@ import refreshRoute from "./routes/refresh.js";
 import pool from "./config/dbConn.js";
 import verifyJWT from "./middleware/verifyJWT.js";
 import getFeaturedFundraiser from "./controllers/api/getFeaturedFundraiser.js";
-import handleFundApi from "./controllers/api/fundraiserController.js";
+import handleResults from "./controllers/api/results.js";
 // import Contact from "../client/src/pages/Contact.jsx";
 
 const PORT = process.env.PORT || 3000;
@@ -36,7 +36,8 @@ app.use("/api", apiRoute);
 app.use("/refresh", refreshRoute);
 app.use("/logout", logoutRoute);
 app.get("/featured-fundraisers", getFeaturedFundraiser);
-app.post("/results", handleFundApi);
+app.use("/results", handleResults);
+
 app.use(errorHandler);
 // app.use("/contact"); //contactRoute
 
