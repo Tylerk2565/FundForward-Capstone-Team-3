@@ -1,7 +1,7 @@
-import Button from "../components/ButtonNavigator";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Button from "../components/ButtonNavigator";
 import LoginModal from "../components/LoginModal";
 import Video from "../assets/Video.mp4";
 import useAuth from "../hooks/useAuth";
@@ -13,7 +13,6 @@ const Home = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const navigate = useNavigate();
   const { auth } = useAuth();
-
   const handleGetStarted = () => {
     if (auth?.user) {
       navigate("/quiz");
@@ -21,7 +20,6 @@ const Home = () => {
       setShowLoginModal(true);
     }
   };
-
   const handleCloseModal = () => {
     setShowLoginModal(false);
   };
@@ -41,7 +39,6 @@ const Home = () => {
         setLoading(false);
       }
     };
-
     fetchFeaturedProjects();
   }, []);
 
@@ -75,7 +72,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
       {/* Quiz Section */}
       <section className="py-12 px-6 max-w-4xl mx-auto">
         <h2 className="text-3xl font-semibold text-center">
@@ -123,7 +119,6 @@ const Home = () => {
           </div>
         </section>
       </section>
-
       {/* Why Giving Back Matters */}
       <section className="py-12 px-6 text-center max-w-4xl mx-auto">
         <h2 className="text-3xl font-semibold">Why Giving Back Matters</h2>
@@ -147,7 +142,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
       {/* Featured Projects Section */}
       <section className="py-12 px-6">
         <h2 className="text-3xl font-semibold text-center">
@@ -199,7 +193,6 @@ const Home = () => {
           </div>
         )}
       </section>
-
       {/* Login Modal */}
       {showLoginModal && (
         <div className="fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center">
@@ -209,5 +202,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;
