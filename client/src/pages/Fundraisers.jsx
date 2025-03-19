@@ -40,7 +40,7 @@ const Fundraisers = () => {
     <div className="max-w-7xl mx-auto p-6">
       {/* Introduction Section */}
       <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-gray-800">Support Meaningful Fundraisers</h1>
+        <h1 className="text-4xl font-bold text-green-600">Support Meaningful Fundraisers</h1>
         <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
           Fundraisers help provide critical resources to communities in need. 
           Whether it’s for education, healthcare, disaster relief, or community development, 
@@ -61,8 +61,8 @@ const Fundraisers = () => {
         />
         <button 
           type="submit" 
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md 
-            hover:bg-blue-700 transition duration-300"
+          className="bg-green-600 text-white px-6 py-3 rounded-lg shadow-md 
+            hover:bg-green-500 transition duration-300"
         >
           Search
         </button>
@@ -106,13 +106,13 @@ const Fundraisers = () => {
               <p className="text-gray-600 text-sm mt-2">
                 {proj.summary.split(" ").slice(0, 20).join(" ")}{proj.summary.split(" ").length > 20 ? "..." : ""}
               </p>
-              <p className="text-blue-500 text-sm mt-2 font-medium">{proj.country}</p>
+              <p className="text-green-500 text-sm mt-2 font-medium">{proj.country}</p>
 
               {/* Progress Bar */}
               <div className="mt-4">
                 <div className="w-full bg-gray-200 rounded-full h-2.5">
                   <div
-                    className="bg-blue-500 h-2.5 rounded-full"
+                    className="bg-green-500 h-2.5 rounded-full"
                     style={{ width: `${(proj.funding / proj.goal) * 100}%` }}
                   ></div>
                 </div>
@@ -125,8 +125,8 @@ const Fundraisers = () => {
                 href={proj.projectLink} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="mt-6 inline-block bg-blue-500 text-white px-6 py-3 rounded-lg 
-                  hover:bg-blue-600 transition duration-200"
+                className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg 
+                  hover:bg-green-600 transition duration-200"
               >
                 View Project
               </a>
