@@ -1,56 +1,10 @@
 import Button from "../components/ButtonNavigator";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import LoginModal from "../components/LoginModal";
 import Video from "../assets/Video.mp4";
 import useAuth from "../hooks/useAuth";
-
-// Dummy project data
-const dummyProjects = [
-  {
-    id: 1,
-    title: "Clean Water Initiative",
-    summary: "lorem",
-    image: "#",
-    projectLink: "#",
-  },
-  {
-    id: 2,
-    title: "Education for All",
-    summary: "lorem",
-    image: "#",
-    projectLink: "#",
-  },
-  {
-    id: 3,
-    title: "Disaster Relief Fund",
-    summary: "lorem",
-    image: ":#",
-    projectLink: "#",
-  },
-  {
-    id: 4,
-    title: "Protect the Rainforest",
-    summary: "lorem",
-    image: "#",
-    projectLink: "#",
-  },
-  {
-    id: 5,
-    title: "Healthcare for All",
-    summary: "lorem",
-    image: "#",
-    projectLink: "#",
-  },
-  {
-    id: 6,
-    title: "Women Empowerment Program",
-    summary: "lorem",
-    image: "#",
-    projectLink: "#",
-  },
-];
 
 const Home = () => {
   const [projects] = useState(dummyProjects);
@@ -69,6 +23,25 @@ const Home = () => {
   const handleCloseModal = () => {
     setShowLoginModal(false);
   };
+
+  // Fetch featured projects from the API
+  useEffect(() => {
+    const fetchFeaturedProjects = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/featured-fundraisers"
+        );
+        setProjects(response.data?.data?.projects?.project || []);
+      } catch (error) {
+        console.error("Error fetching featured projects:", error);
+        setError("Failed to load projects. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeaturedProjects();
+  }, []);
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -135,10 +108,7 @@ const Home = () => {
             impact today.
           </p>
           <div className="mt-6">
-            <Button
-              name={"Get Started"}
-              onClick={handleGetStarted}
-            />
+            <Button name={"Get Started"} onClick={handleGetStarted} />
           </div>
         </section>
       </section>
