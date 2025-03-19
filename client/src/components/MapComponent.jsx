@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import axios from "axios";
 
-
 const containerStyle = {
   width: "100%",
   height: "500px",
+  borderRadius: "10px",
 };
 
 const defaultCenter = {
@@ -15,52 +15,102 @@ const defaultCenter = {
 
 const MapComponent = () => {
   const [places, setPlaces] = useState([]);
-  const MAP_API_KEY = import.meta.env.GOOGLE_MAPS_API_KEY; // Use Vite env variable
+  const [userLocation, setUserLocation] = useState(defaultCenter);
+  const [selectedPlace, setSelectedPlace] = useState(null);
+
+  useEffect(() => {
+    // Get user's current location
+    const getLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setUserLocation({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+            setUserLocation(defaultCenter);
+          }
+        );
+      } else {
+        console.error("Geolocation not supported");
+        setUserLocation(defaultCenter);
+      }
+    };
+
+    getLocation();
+  }, []);
 
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        const response = await axios.get(
-          `https://maps.googleapis.com/maps/api/place/nearbysearch/json`,
-          {
-            params: {
-              location: `${defaultCenter.lat},${defaultCenter.lng}`,
-              radius: 5000, // 5km radius
-              keyword: "volunteer donation non-profit",
-              key: MAP_API_KEY,
-            },
-          }
-        );
+        const response = await axios.get("http://localhost:3000/api/maps/places", {
+          params: {
+            lat: userLocation.lat,
+            lng: userLocation.lng,
+          },
+        });
 
-        if (response.data.results) {
-          setPlaces(response.data.results);
+        if (response.data) {
+          console.log(response.data);
+          setPlaces(response.data);
         }
       } catch (error) {
         console.error("Error fetching places:", error);
       }
     };
 
-    fetchPlaces();
-  }, [MAP_API_KEY]);
+    if (userLocation.lat !== defaultCenter.lat && userLocation.lng !== defaultCenter.lng) {
+      fetchPlaces();
+    }
+  }, [userLocation]);
 
   return (
-    <LoadScript googleMapsApiKey={MAP_API_KEY} libraries={["places"]}>
-      <GoogleMap mapContainerStyle={containerStyle} center={defaultCenter} zoom={12}>
-        {places.map((place) => (
-          <Marker
-            key={place.place_id}
-            position={{
-              lat: place.geometry.location.lat,
-              lng: place.geometry.location.lng,
-            }}
-            title={place.name}
-          />
-        ))}
-      </GoogleMap>
-    </LoadScript>
+    <div className="flex flex-col md:flex-row gap-4 p-4">
+      {/* Map Section */}
+      <div className="flex-1 shadow-lg rounded-xl overflow-hidden">
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={userLocation}
+          zoom={15}
+          className="w-full h-full"
+        >
+          {places.map((place) => (
+            <Marker
+              key={place.place_id}
+              position={{
+                lat: place.geometry.location.lat,
+                lng: place.geometry.location.lng,
+              }}
+              title={place.name}
+              onClick={() => setSelectedPlace(place)}
+            />
+          ))}
+        </GoogleMap>
+      </div>
+
+      {/* Selected Place Details */}
+      {selectedPlace && (
+        <div className="w-full md:w-1/3 p-4 bg-white shadow-lg rounded-xl">
+          <h2 className="text-lg font-semibold">{selectedPlace.name}</h2>
+          <p className="text-gray-600">{selectedPlace.vicinity}</p>
+          <p className="text-gray-800 mt-2">Rating: ⭐ {selectedPlace.rating || "N/A"}</p>
+          <button
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            onClick={() => setSelectedPlace(null)}
+          >
+            Close
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 
 export default MapComponent;
+
+
 
 
