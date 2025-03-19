@@ -49,7 +49,7 @@ app.get("/api/maps/places", async (req, res) => {
       {
         params: {
           location: `${lat},${lng}`,
-          radius: 5000, // 4km radius
+          radius: 10000, // 10km radius
           keyword: "volunteer donation non-profit",
           key: MAP_API_KEY,
         },
