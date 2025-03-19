@@ -34,20 +34,34 @@ app.use('/logout', logoutRoute)
 
 app.use(errorHandler);
 
-// async function connectDB() {
-//   try {
-//       // Get a connection from the pool
-//       const connection = await pool.getConnection();
-//       console.log('Connected to MySQL Database');
+// Google Maps Places API Route
+app.get("/api/maps/places", async (req, res) => {
+  const { lat, lng } = req.query; // Get latitude and longitude from query parameters
+  const MAP_API_KEY = process.env.GOOGLE_MAPS_API_KEY; // Store your API key in .env
 
-//       // Release connection back to the pool (DON'T end it)
-//       connection.release();
-//   } catch (err) {
-//       console.error('Database connection error:', err);
-//   }
-// }
+  if (!lat || !lng) {
+    return res.status(400).json({ error: "Latitude and longitude are required" });
+  }
 
-//connectDB();
+  try {
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/place/nearbysearch/json`,
+      {
+        params: {
+          location: `${lat},${lng}`,
+          radius: 5000, // 4km radius
+          keyword: "volunteer donation non-profit",
+          key: MAP_API_KEY,
+        },
+      }
+    );
+
+    res.json(response.data.results);
+  } catch (error) {
+    console.error("Error fetching places from Google Maps:", error);
+    res.status(500).json({ error: "Error fetching places" });
+  }
+});
 
 app.all('*', (req, res) => {
   res.status(404)
@@ -58,9 +72,7 @@ app.all('*', (req, res) => {
   } else {
       res.type('txt').send('404 Not Found')
   }
-})
-
-
+});
 
 app.listen(PORT, () => {
   console.log(`Server started at http://localhost:${PORT}`);
