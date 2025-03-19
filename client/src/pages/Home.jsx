@@ -1,63 +1,18 @@
-import Button from "../components/ButtonNavigator";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Button from "../components/ButtonNavigator";
 import LoginModal from "../components/LoginModal";
 import Video from "../assets/Video.mp4";
 import useAuth from "../hooks/useAuth";
 
-// Dummy project data
-const dummyProjects = [
-  {
-    id: 1,
-    title: "Clean Water Initiative",
-    summary: "lorem",
-    image: "#",
-    projectLink: "#",
-  },
-  {
-    id: 2,
-    title: "Education for All",
-    summary: "lorem",
-    image: "#",
-    projectLink: "#",
-  },
-  {
-    id: 3,
-    title: "Disaster Relief Fund",
-    summary: "lorem",
-    image: ":#",
-    projectLink: "#",
-  },
-  {
-    id: 4,
-    title: "Protect the Rainforest",
-    summary: "lorem",
-    image: "#",
-    projectLink: "#",
-  },
-  {
-    id: 5,
-    title: "Healthcare for All",
-    summary: "lorem",
-    image: "#",
-    projectLink: "#",
-  },
-  {
-    id: 6,
-    title: "Women Empowerment Program",
-    summary: "lorem",
-    image: "#",
-    projectLink: "#",
-  },
-];
-
 const Home = () => {
-  const [projects] = useState(dummyProjects);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const navigate = useNavigate();
   const { auth } = useAuth();
-
   const handleGetStarted = () => {
     if (auth?.user) {
       navigate("/quiz");
@@ -65,10 +20,27 @@ const Home = () => {
       setShowLoginModal(true);
     }
   };
-
   const handleCloseModal = () => {
     setShowLoginModal(false);
   };
+
+  // Fetch featured projects from the API
+  useEffect(() => {
+    const fetchFeaturedProjects = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/featured-fundraisers"
+        );
+        setProjects(response.data?.data?.projects?.project || []);
+      } catch (error) {
+        console.error("Error fetching featured projects:", error);
+        setError("Failed to load projects. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeaturedProjects();
+  }, []);
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -92,7 +64,11 @@ const Home = () => {
             volunteer, and make an impact today.
           </p>
           <div className="mt-6">
-            <Button name={"Get Started"} />
+            <Button
+              name={"Register Here"}
+              onClick={handleGetStarted}
+              routeName={"register"}
+            />
           </div>
         </div>
       </section>
@@ -138,6 +114,7 @@ const Home = () => {
             <Button
               name={"Get Started"}
               onClick={handleGetStarted}
+              routeName={"quiz"}
             />
           </div>
         </section>
@@ -146,9 +123,9 @@ const Home = () => {
       <section className="py-12 px-6 text-center max-w-4xl mx-auto">
         <h2 className="text-3xl font-semibold">Why Giving Back Matters</h2>
         <p className="text-gray-600 mt-4">
-          Your contributions-whether through time or donations-help create
+          Your contributions—whether through time or donations—help create
           lasting change. Supporting local projects improves education, health,
-          and the environment, while strenghtening communities.
+          and the environment while strengthening communities.
         </p>
         <div className="flex justify-center mt-6 space-x-6">
           <div className="bg-white p-4 shadow-md rounded-lg">
@@ -165,39 +142,45 @@ const Home = () => {
           </div>
         </div>
       </section>
-      {/* Featured Projects */}
-      <div className="bg-gray-100 min-h-screen">
-        {/* Featured Projects Section */}
-        <section className="py-12 px-6">
-          <h2 className="text-3xl font-semibold text-center">
-            Featured Projects
-          </h2>
-          <p className="text-gray-600 text-center mt-2">
-            Support our top initiatives.
-          </p>
-          {/* Project Grid */}
+      {/* Featured Projects Section */}
+      <section className="py-12 px-6">
+        <h2 className="text-3xl font-semibold text-center">
+          Featured Projects
+        </h2>
+        <p className="text-gray-600 text-center mt-2">
+          Support our top initiatives.
+        </p>
+        {loading ? (
+          <p className="text-center mt-6 text-gray-500">Loading projects...</p>
+        ) : error ? (
+          <p className="text-center mt-6 text-red-500">{error}</p>
+        ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-12 relative">
             {projects.map((project, index) => (
               <div
                 key={project.id}
-                className={`bg-white shadow-lg rounded-lg p-4 relative transform transition-transform hover:scale-105 hover:shadow-xl
-               ${
-                 index % 2 === 0
-                   ? "translate-x-4 -rotate-2"
-                   : "-translate-x-4 rotate-2"
-               }`}
+                className={`bg-white shadow-lg rounded-lg p-4 relative transform transition-transform hover:scale-105 hover:shadow-xl ${
+                  index % 2 === 0
+                    ? "translate-x-4 -rotate-2"
+                    : "-translate-x-4 rotate-2"
+                }`}
                 style={{ boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)" }}
               >
                 <img
-                  src={project.image}
+                  src={
+                    project.image?.imagelink?.[0]?.url ||
+                    "https://via.placeholder.com/400"
+                  }
                   alt={project.title}
                   className="rounded-md w-full h-48 object-cover"
                 />
                 <h3 className="text-lg font-semibold mt-4">{project.title}</h3>
-                <p className="text-gray-700 mt-2 text-sm">{project.summary}</p>
+                <p className="text-gray-700 mt-2 text-sm">
+                  {project.summary || "No summary available."}
+                </p>
                 <div className="mt-4">
                   <a
-                    href={project.projectLink}
+                    href={project.projectLink || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 font-semibold hover:underline"
@@ -208,9 +191,8 @@ const Home = () => {
               </div>
             ))}
           </div>
-        </section>
-      </div>
-
+        )}
+      </section>
       {/* Login Modal */}
       {showLoginModal && (
         <div className="fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center">
@@ -220,5 +202,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;
