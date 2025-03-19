@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import LoginModal from "../components/LoginModal";
 import Video from "../assets/Video.mp4";
+import useAuth from "../hooks/useAuth";
 
 // Dummy project data
 const dummyProjects = [
@@ -55,10 +56,10 @@ const Home = () => {
   const [projects] = useState(dummyProjects);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const navigate = useNavigate();
-  // const { isAuthenticated } = useAuth();
+  const { auth } = useAuth();
 
   const handleGetStarted = () => {
-    if (isAuthenticated) {
+    if (auth?.user) {
       navigate("/quiz");
     } else {
       setShowLoginModal(true);
@@ -91,7 +92,7 @@ const Home = () => {
             volunteer, and make an impact today.
           </p>
           <div className="mt-6">
-            <Button name={"Get Started"} routeName={"quiz"} />
+            <Button name={"Get Started"} />
           </div>
         </div>
       </section>
@@ -136,7 +137,6 @@ const Home = () => {
           <div className="mt-6">
             <Button
               name={"Get Started"}
-              routeName={"quiz"}
               onClick={handleGetStarted}
             />
           </div>

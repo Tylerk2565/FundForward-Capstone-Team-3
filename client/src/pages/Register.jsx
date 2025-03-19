@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Dialog } from "@headlessui/react";
 
 const USER_REGEX = /^[a-zA-Z0-9]{3,}$/;
 
@@ -30,6 +32,8 @@ const Register = () => {
 
   const [confirmPassword, setConfirmPassword] = useState("");
   const [validMatch, setValidMatch] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
   
 
   const [error, setError] = useState("");
@@ -108,8 +112,10 @@ const Register = () => {
       console.log(res.accessToken);
       console.log(JSON.stringify(res));
 
-      alert("Registration successful! You can now log in.");
-      navigate("/login");
+      setIsLoading(true);
+      setTimeout(() => {
+        navigate("/login");
+      }, 4500);
     } catch (err) {
       console.log(err);
       if (!err?.response) {
@@ -234,6 +240,24 @@ const Register = () => {
           </a>
         </p>
       </div>
+
+      {isLoading && (
+        <Dialog
+        open={isLoading}
+        onClose={() => {}}
+        className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-[2px]" // Slightly dark background
+      >
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center"> {/* Solid white modal */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 1 }}
+            className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"
+          ></motion.div>
+          <p className="text-gray-800">User is being created... Redirecting to login page.</p>
+        </div>
+      </Dialog>
+      )}
+
     </div>
   );
 };

@@ -1,13 +1,17 @@
 import React from 'react'
 import BioCard from '../components/BioCard'
 import jerry from '../assets/jerry.jpg'
+import sky from '../assets/sky.jpg'
+import tyler from '../assets/tyler.jpg'
+import kevin from '../assets/kevin.jpg'
+import malika from '../assets/malika.png'
 
 const About = () => {
 
     return (
         <>
-           <div className="relative w-full h-screen flex items-center justify-center">
-                <div className="absolute top-1/2 left-0 w-full h-[80vh] -translate-y-1/2"> 
+           <div className="relative w-full h-80 flex items-center justify-center m-0">
+                <div className="absolute top-1/2 left-0 w-full h-[100vh] -translate-y-1/2"> 
                     <img src="https://images.unsplash.com/photo-1507810670121-b08efd787765?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
                         alt="Charlotte Skyline" 
                         className="w-full h-full object-cover"
@@ -18,7 +22,7 @@ const About = () => {
                         <div className="absolute top-0 left-0 w-full h-full bg-black/30"></div> 
                     </div>
                 </div>
-                <h1 className="relative text-white font-bold text-5xl">About Us</h1>
+                <h1 className="relative text-white font-bold text-5xl m-0">About Us</h1>
             </div>
 
             <div className="flex flex-col items-center justify-center text-center">
@@ -30,30 +34,44 @@ const About = () => {
 
 
             <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+                <div className='mb-7'>
+                    <BioCard
+                        name="Malika Khan"
+                        role="Manager"
+                        bio="Malika is a passionate developer with 10+ years of experience in full-stack development."
+                        image={malika} // Replace with a real image URL
+                        link={'https://www.linkedin.com/in/malika-khan/'}
+                    />
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <BioCard
                     name="Jerry Castro Luz"
                     role="Apprentice"
                     bio="Jerry is a passionate developer with 10+ years of experience in full-stack development."
                     image={jerry} // Replace with a real image URL
+                    link={"https://www.linkedin.com/in/jerry-castro-luz/"}
                     />
                     <BioCard
                     name="Sky Patterson"
                     role="Apprentice"
-                    bio="Placeholder bio for Sky Patterson."
-                    image="https://s7d2.scene7.com/is/image/PetSmart/5081324"
+                    bio="Sky is a passionate developer with 10+ years of experience in full-stack development."
+                    image={sky}
+                    link={"https://www.linkedin.com/in/sky-patterson-baker/"}
                     />
                     <BioCard
                     name="Tyler Krug"
                     role="Apprentice"
-                    bio="Placeholder bio for Tyler Krug."
-                    image="https://s7d2.scene7.com/is/image/PetSmart/5081324"
+                    bio="Tyler is a passionate developer with 10+ years of experience in full-stack development."
+                    image={tyler}
+                    link={"https://www.linkedin.com/in/tyler-krug-5600a4148/"}
                     />
                      <BioCard
                     name="Kevin Guzman"
                     role="Apprentice"
-                    bio="Placeholder bio for Kevin Guzman."
-                    image="https://s7d2.scene7.com/is/image/PetSmart/5081324"
+                    bio="Kevin is a passionate developer with 10+ years of experience in full-stack development."
+                    image={kevin}
+                    link={"https://www.linkedin.com/in/kcastr1628/"}
                     />
                 </div>
             </div>
