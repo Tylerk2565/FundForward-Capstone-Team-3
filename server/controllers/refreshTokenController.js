@@ -7,13 +7,16 @@ import cookieParser from "cookie-parser";
 const handleRefreshToken = async(req, res) => {
     const connection = await pool.getConnection();
     try {
-
+        // checks if there is a cookie in the http header
         const cookies = req.cookies
 
     if(!cookies?.jwt) return res.sendStatus(401)
+    
     console.log(cookies.jwt);
+    // set refreshToken as the cookie
     const refreshToken = cookies.jwt;
 
+    // is refreshToken in db?
     const [rows] = await connection.query(`
         SELECT u.id, u.username 
         FROM users u
@@ -21,10 +24,11 @@ const handleRefreshToken = async(req, res) => {
         WHERE rt.refresh_token = ?
     `, [refreshToken]);
 
+    // if not refreshToken in db return 403
     if(rows.length === 0) return res.sendStatus(403); // Forbidden
     
     const foundUser = rows[0];
-
+    // get roles from db based on user_id
     const [roleRows] = await connection.query(
         `SELECT r.role_name FROM roles r
         JOIN user_roles ur ON r.id = ur.role_id
@@ -32,10 +36,10 @@ const handleRefreshToken = async(req, res) => {
         `,
         [foundUser.id]
     )
-
+    // map roles to array
     const roles = roleRows.map(row => row.role_name)
 
-    // evaluate jwt
+    // evaluate jwt make sure accessToken and refreshToken match
     jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
@@ -49,6 +53,7 @@ const handleRefreshToken = async(req, res) => {
                 process.env.ACCESS_TOKEN_SECRET,
                 {expiresIn: '1m'}
             );
+            // send back roles and accessToken
             res.json({roles, accessToken})
         }
     )
