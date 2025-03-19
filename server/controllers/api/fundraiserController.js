@@ -48,6 +48,7 @@ const handleFundApi = async (req, res) => {
     const url = `${BASE_URL}&q=${encodeURIComponent(searchQuery)}`;
 
     console.log("Mapped search query:", searchQuery);
+    console.log(url);
 
     // Fetch data from API
     const response = await axios.get(url);
