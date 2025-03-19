@@ -12,33 +12,38 @@ import PersistLogin from "./components/PersistLogin";
 import Contact from "./pages/Contact";
 import Results from "./pages/Results";
 import Volunteer from "./pages/Volunteer";
+import { LoadScript } from "@react-google-maps/api";
 
 const App = () => {
+  const libraryArray = ["places"];
+
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <div className="flex-grow">
-          <Routes>
+    <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={libraryArray}>
+      <Router>
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
+          <div className="flex-grow">
+            <Routes>
 
-            <Route path="/" element={<Home />} />
-            <Route path="/fundraiser" element={<Fundraisers />} />
-            <Route path="/volunteer" element={<Volunteer />} />
-            <Route path="/quiz" element={<QuizPage />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/fundraiser" element={<Fundraisers />} />
+              <Route path="/volunteer" element={<Volunteer />} />
+              <Route path="/quiz" element={<QuizPage />} />
 
-            <Route path="/results" element={<Results />} />
-            <Route element={<PersistLogin />}>
-              <Route path="/profile" element={<Profile />} />
-            </Route>
+              <Route path="/results" element={<Results />} />
+              <Route element={<PersistLogin />}>
+                <Route path="/profile" element={<Profile />} />
+              </Route>
 
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/contact" element={<Contact />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </Router>
+      </Router>
+    </LoadScript>
   );
 };
 
