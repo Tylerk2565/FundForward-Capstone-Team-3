@@ -5,7 +5,7 @@ import { motion } from "framer-motion"; // Import Framer Motion
 const Fundraisers = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("education"); // Default search term
+  const [searchTerm, setSearchTerm] = useState("Education"); // Default search term
 
   const searchFundraisers = async (query) => {
     try {
@@ -37,7 +37,12 @@ const Fundraisers = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <motion.div 
+      className="max-w-7xl mx-auto p-6"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
       {/* Introduction Section */}
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold text-green-600">Support Meaningful Fundraisers</h1>
@@ -71,26 +76,22 @@ const Fundraisers = () => {
       {/* Loading State */}
       {loading && <p className="text-center text-gray-500 text-lg">Loading fundraisers...</p>}
 
-      {/* Display Projects with Staggered Fade-in Animation */}
+      {/* Display Projects with Staggered Fade-in & Slide-up Animation */}
       {!loading && projects.length > 0 ? (
         <motion.div 
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            visible: { transition: { staggerChildren: 0.2 } }, // Staggered fade-in
-          }}
+          initial={{ opacity: 0, y: 50 }} // Grid slides up
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut", staggerChildren: 0.2 }} // Stagger children
         >
           {projects.map((proj, index) => (
             <motion.div 
               key={proj.id}
               className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl 
                 hover:scale-105 transition-all duration-300 transform"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 0.5, delay: index * 0.1 }} // Delayed appearance
+              initial={{ opacity: 0, y: 50 }} // Cards slide up
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }} // Staggered appearance
             >
               <div className="relative">
                 {proj.image?.imagelink && proj.image.imagelink.length > 0 && (
@@ -136,11 +137,12 @@ const Fundraisers = () => {
       ) : (
         !loading && <p className="text-center text-gray-500 text-lg">No projects found. Try searching for another cause!</p>
       )}
-    </div>
+    </motion.div>
   );
 };
 
 export default Fundraisers;
+
 
 
 
