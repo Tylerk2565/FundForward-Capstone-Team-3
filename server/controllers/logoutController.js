@@ -26,6 +26,7 @@ const handleLogout = async (req, res) => {
 
     console.log(deleteRefreshToken);
 
+    // delete cookie from http header
     res.clearCookie('jwt',  { httpOnly: true, sameSite:'None'}) // secure: true - only serves on https
     res.sendStatus(204);
     

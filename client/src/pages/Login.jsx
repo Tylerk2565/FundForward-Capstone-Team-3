@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { motion } from "framer-motion";
+import { Dialog } from "@headlessui/react";
 
 
 const Login = () => {
@@ -11,6 +13,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     console.log("here's the auth bois", auth);
@@ -24,8 +28,7 @@ const Login = () => {
     e.preventDefault();
     setError("");
 
-    // If any field is invalid, return
-
+    // fetch the data from the server
     try {
       const res = await axios.post(
         "http://localhost:3000/auth",
@@ -46,7 +49,12 @@ const Login = () => {
       setUser("");
       setPassword("");
 
-      navigate("/");
+      setIsLoading(true);
+
+      setTimeout(() => {
+        navigate("/");
+      }, 4500);
+
     } catch (err) {
       console.log(err);
       if (!err?.response) {
@@ -98,6 +106,23 @@ const Login = () => {
           </a>
         </p>
       </div>
+
+      {isLoading && (
+        <Dialog
+        open={isLoading}
+        onClose={() => {}}
+        className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-[2px]" // Slightly dark background
+      >
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center"> {/* Solid white modal */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 1 }}
+            className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"
+          ></motion.div>
+          <p className="text-gray-800">Logging User In... Redirecting to Home page.</p>
+        </div>
+      </Dialog>
+      )}
     </div>
   );
 };

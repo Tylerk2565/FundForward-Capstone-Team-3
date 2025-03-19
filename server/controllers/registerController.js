@@ -34,6 +34,7 @@ const handleNewUser = async (req, res) => {
     // encrypt password
     const hashedPwd = await bcrypt.hash(pwd, 12);
 
+    // generate a unique ID for the new user
     const uniqueId = randomUUID();
     console.log(uniqueId);
 
@@ -45,6 +46,7 @@ const handleNewUser = async (req, res) => {
     );
     console.log(result)
 
+    // assign the 'User' role to the new user
     const newUserRole = await connection.query(
       `INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)`,
       [uniqueId, 1]  // Assuming 1 is the 'User' role ID
