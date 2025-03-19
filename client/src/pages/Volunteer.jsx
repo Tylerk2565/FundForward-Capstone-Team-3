@@ -6,7 +6,7 @@ const Volunteer = () => {
     <div className="min-h-screen bg-gray-100 flex flex-col items-center px-6 md:px-16 py-12">
       {/* Hero Section */}
       <div className="max-w-4xl text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-blue-700">
+        <h1 className="text-4xl md:text-5xl font-bold text-green-600">
           Make a Difference in Your Community
         </h1>
         <p className="mt-4 text-lg text-gray-700">

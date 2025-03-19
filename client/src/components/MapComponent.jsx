@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
 
 const containerStyle = {
   width: "100%",
@@ -19,7 +20,6 @@ const MapComponent = () => {
   const [selectedPlace, setSelectedPlace] = useState(null);
 
   useEffect(() => {
-    // Get user's current location
     const getLocation = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -69,8 +69,13 @@ const MapComponent = () => {
 
   return (
     <div className="flex flex-col md:flex-row gap-4 p-4">
-      {/* Map Section */}
-      <div className="flex-1 shadow-lg rounded-xl overflow-hidden">
+      {/* Animated Map Section */}
+      <motion.div
+        className="shadow-lg rounded-xl overflow-hidden flex-grow"
+        initial={{ flex: 1 }}
+        animate={{ flex: selectedPlace ? 0.7 : 1 }} // Shrink when selectedPlace is open
+        transition={{ type: "spring", stiffness: 100, damping: 15 }}
+      >
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={userLocation}
@@ -89,27 +94,44 @@ const MapComponent = () => {
             />
           ))}
         </GoogleMap>
-      </div>
+      </motion.div>
 
-      {/* Selected Place Details */}
-      {selectedPlace && (
-        <div className="w-full md:w-1/3 p-4 bg-white shadow-lg rounded-xl">
-          <h2 className="text-lg font-semibold">{selectedPlace.name}</h2>
-          <p className="text-gray-600">{selectedPlace.vicinity}</p>
-          <p className="text-gray-800 mt-2">Rating: ⭐ {selectedPlace.rating || "N/A"}</p>
-          <button
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-            onClick={() => setSelectedPlace(null)}
+      {/* Selected Place Details with Animation */}
+      <AnimatePresence>
+        {selectedPlace && (
+          <motion.div
+            initial={{ x: "100%", opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: "100%", opacity: 0 }}
+            transition={{ type: "spring", stiffness: 100, damping: 15 }}
+            className="p-4 bg-white shadow-lg rounded-xl"
+            style={{ flex: 0.3 }}
           >
-            Close
-          </button>
-        </div>
-      )}
+            <h2 className="text-lg font-semibold">{selectedPlace.name}</h2>
+            <p className="text-gray-600">{selectedPlace.vicinity}</p>
+            <p className="text-gray-800 mt-2">Rating: ⭐ {selectedPlace.rating || "N/A"}</p>
+            <motion.button
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              onClick={() => setSelectedPlace(null)}
+              initial={{ x: 0 }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%", opacity: 0 }}
+              transition={{ type: "spring", stiffness: 100, damping: 15 }}
+            >
+              Close
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
 export default MapComponent;
+
+
+
+
 
 
 
