@@ -6,8 +6,6 @@ export const handleContactForm = async (req, res) => {
     const connection = await pool.getConnection();
 
     try {
-        // await connection.beginTransaction();
-
         const result = await connection.query(
             "INSERT INTO contact_form (name, email, comment) VALUES (?, ?, ?)",
             [name, email, comment]
@@ -15,14 +13,11 @@ export const handleContactForm = async (req, res) => {
 
         console.log(result);
 
-        // await connection.commit();
-
         res.status(201).send({ "success": "Message sent!" });
     } catch (err) {
         console.error(err);
         res.status(500).send({ "message": "Internal Server Error" });
-    }
-    finally {
+    } finally {
         connection.release();
     }
 }
@@ -41,8 +36,49 @@ export const getContactForm = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send({ "message": "Internal Server Error" });
+    } finally {
+        connection.release();
     }
-    finally {
+}
+
+export const markAsRead = async (req, res) => {
+    const { id } = req.params;
+    const connection = await pool.getConnection();
+
+    try {
+        const result = await connection.query(
+            "UPDATE contact_form SET isRead = 1 WHERE id = ?",
+            [id]
+        );
+
+        console.log(result);
+
+        res.status(200).send({ "success": "Message marked as read!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ "message": "Internal Server Error" });
+    } finally {
+        connection.release();
+    }
+}
+
+export const deleteMessage = async (req, res) => {
+    const { id } = req.params;
+    const connection = await pool.getConnection();
+
+    try {
+        const result = await connection.query(
+            "DELETE FROM contact_form WHERE id = ?",
+            [id]
+        );
+
+        console.log(result);
+
+        res.status(200).send({ "success": "Message deleted!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ "message": "Internal Server Error" });
+    } finally {
         connection.release();
     }
 }
