@@ -17,6 +17,11 @@ import About from "./pages/About";
 import AdminMessages from "./pages/AdminMessages";
 import RequireAuth from "./components/requireAuth";
 
+const ROLES = {
+  User: 'User',
+  Admin: 'Admin'
+};
+
 const App = () => {
   const libraryArray = ["places"];
 
@@ -33,7 +38,7 @@ const App = () => {
               <Route element={<PersistLogin />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/results" element={<Results />} />
-                <Route path="/profile" element={<Profile />} />
+                
                 <Route path="/fundraiser" element={<Fundraisers />} />
                 <Route path="/volunteer" element={<Volunteer />} />
                 <Route path="/quiz" element={<QuizPage />} />
@@ -42,7 +47,13 @@ const App = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
 
-                <Route path="/admin-messages" element={<AdminMessages />} />
+                <Route element={<RequireAuth allowedRoles={[ROLES.User]}/>}>
+                  <Route path="/profile" element={<Profile />} />
+                </Route>
+
+                <Route element={<RequireAuth allowedRoles={[ROLES.Admin]}/>}>
+                  <Route path="/admin-messages" element={<AdminMessages />} />
+                </Route>
 
               </Route>
 

@@ -24,7 +24,7 @@ const Home = () => {
   const handleCloseModal = () => {
     setShowLoginModal(false);
   };
-
+  
   // Fetch featured projects from the API
   useEffect(() => {
     const fetchFeaturedProjects = async () => {
