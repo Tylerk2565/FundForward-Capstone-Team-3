@@ -61,10 +61,6 @@ const Quiz = () => {
       : "Calculating results...";
   };
 
-  // const getUser = () => {
-  //   // implement this later
-  //   return true;
-  // };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-100 to-blue-200 p-6">
