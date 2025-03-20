@@ -5,6 +5,7 @@ import Button from "../components/ButtonNavigator";
 import LoginModal from "../components/LoginModal";
 import Video from "../assets/Video.mp4";
 import useAuth from "../hooks/useAuth";
+import { FaBookmark } from "react-icons/fa";
 
 const Home = () => {
   const [projects, setProjects] = useState([]);
@@ -178,6 +179,29 @@ const Home = () => {
                 <p className="text-gray-700 mt-2 text-sm">
                   {project.summary || "No summary available."}
                 </p>
+
+                {/* Action Buttons */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <button
+                    onClick={() => handleDonate(project)}
+                    className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300"
+                  >
+                    Donate
+                  </button>
+                  <button
+                    onClick={() => handleVolunteer(project)}
+                    className="bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition duration-300"
+                  >
+                    Volunteer
+                  </button>
+                  <button
+                    onClick={() => handleSave(project)}
+                    className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
+                  >
+                    Save
+                  </button>
+                </div>
+
                 <div className="mt-4">
                   <a
                     href={project.projectLink || "#"}
@@ -193,6 +217,7 @@ const Home = () => {
           </div>
         )}
       </section>
+
       {/* Login Modal */}
       {showLoginModal && (
         <div className="fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center">
