@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import quizQuestions from "./questions";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const initialCategoryScores = {
   A: 0,
@@ -12,6 +13,8 @@ const initialCategoryScores = {
 };
 
 const Quiz = () => {
+  const navigate = useNavigate();
+
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -23,7 +26,7 @@ const Quiz = () => {
     setSelectedAnswer(null);
   }, [currentQuestion]);
 
-  // Based on what option the user selects, it selects the id of that option from our quizQuestions in the questions.js
+  // Based on user's input, it selects the id of that option from our quizQuestions in the questions.js
   const handleAnswerSelect = (id, value) => {
     setSelectedAnswer({ id, value });
   };
@@ -31,65 +34,67 @@ const Quiz = () => {
   const handleSubmit = async () => {
     if (!selectedAnswer) return;
 
-    const finalScores = {
-      // Creates a new object that includes all properties from categoryScores and increments the score for selected value/answer
-      ...categoryScores,
-      [selectedAnswer.value]: categoryScores[selectedAnswer.value] + 1,
-    };
+    setCategoryScores((prevScores) => {
+      const updatedScores = {
+        ...prevScores,
+        [selectedAnswer.value]: prevScores[selectedAnswer.value] + 1,
+      };
 
-    setCategoryScores(finalScores);
-
-    // Sends a post request when the last question is answered
-    if (currentQuestion === quizQuestions.length - 1) {
-      try {
-        const response = await axios.post("http://localhost:3000/results", {
-          scores: finalScores,
-        });
-        setRecommendation(response.data.recommendation);
-        setSubmitted(true);
-      } catch (err) {
-        console.log("Error Submitting Quiz", err);
+      if (currentQuestion === quizQuestions.length - 1) {
+        axios
+          .post("http://localhost:3000/results", { scores: updatedScores })
+          .then((response) => {
+            navigate("/results", { state: { userPreferences: updatedScores } });
+          })
+          .catch((err) => console.log("Error submitting quiz:", err));
+      } else {
+        setCurrentQuestion(currentQuestion + 1);
       }
-    } else {
-      setCurrentQuestion(currentQuestion + 1);
-    }
+
+      return updatedScores;
+    });
   };
 
   const getResultMessage = () => {
-    if (recommendation) return `Your result is ${recommendation}`;
+    return recommendation
+      ? `Your result is ${recommendation}`
+      : "Calculating results...";
   };
 
-  const getUser = () => {
-    // implement this later
-    return true;
-  };
+  // const getUser = () => {
+  //   // implement this later
+  //   return true;
+  // };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 p-6">
-      <div className="bg-white shadow-2xl rounded-lg p-6 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-green-600 mb-4 text-center">
-          Simple Quiz
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-100 to-blue-200 p-6">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+        <h1 className="text-3xl font-extrabold text-green-700 mb-4 text-center">
+          Personalized Preferences
         </h1>
+
         <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
           <div
-            className="bg-blue-500 h-2 rounded-full"
+            className="bg-green-500 h-2 rounded-full"
             style={{
               width: `${((currentQuestion + 1) / quizQuestions.length) * 100}%`,
             }}
           ></div>
         </div>
-        <h2 className="text-lg font-semibold mb-4 text-center">
+
+        <h2 className="text-xl font-semibold mb-4 text-center text-gray-700">
           {quizQuestions[currentQuestion].question}
         </h2>
-        <div className="space-y-2">
+
+        <div className="space-y-4">
           {/* Maps through the currentQuestion in our quizQuestions */}
           {quizQuestions[currentQuestion].options.map((option) => (
             <button
               key={option.id}
               onClick={() => handleAnswerSelect(option.id, option.value)}
-              className={`w-full text-left px-4 py-2 rounded-lg transition duration-300 ease-in-out ${
+              className={`w-full text-left px-5 py-3 rounded-lg transition duration-300 ease-in-out ${
                 selectedAnswer && selectedAnswer.id === option.id
-                  ? "bg-green-100 text-green-600"
+                  ? "bg-green-100 text-green-700 border border-green-500"
                   : "bg-gray-100 hover:bg-gray-200"
               }`}
             >
@@ -97,16 +102,18 @@ const Quiz = () => {
             </button>
           ))}
         </div>
+
         <button
           onClick={handleSubmit}
-          className="mt-4 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-300 ease-in-out"
+          className="mt-6 w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition duration-300 ease-in-out"
           disabled={selectedAnswer === null}
         >
           {currentQuestion !== quizQuestions.length - 1 ? "Next" : "Submit"}
         </button>
+
         {submitted && (
           <div className="mt-4 text-center">
-            <p className="text-green-600">{getResultMessage()}</p>
+            <p className="text-green-600 font-semibold">{getResultMessage()}</p>
           </div>
         )}
       </div>
