@@ -78,6 +78,11 @@ app.get("/api/maps/places", async (req, res) => {
   }
 });
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+});
+
+
 app.all("*", (req, res) => {
   res.status(404);
   if (req.accepts("html")) {
