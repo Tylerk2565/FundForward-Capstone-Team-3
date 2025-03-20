@@ -16,6 +16,7 @@ import About from "./pages/About";
 import AdminMessages from "./pages/AdminMessages";
 import AdminHomePage from "./pages/AdminHome";
 import Results from "./pages/Results";
+import RequireAuth from "./components/RequireAuth";
 
 const ROLES = {
   User: 'User',
