@@ -13,12 +13,13 @@ import apiRoute from "./routes/api/fundraiser.js";
 import logoutRoute from "./routes/logout.js";
 import errorHandler from "./middleware/errorHandler.js";
 import refreshRoute from "./routes/refresh.js";
+import saveRoute from "./routes/save.js";
 import pool from "./config/dbConn.js";
 import verifyJWT from "./middleware/verifyJWT.js";
 import getFeaturedFundraiser from "./controllers/api/getFeaturedFundraiser.js";
 import handleResults from "./controllers/api/results.js";
 import contactFormRoutes from './routes/api/contactForm.js';
-// import saveRoute from "./routes/save.js"
+import saveRoute from "./routes/save.js"
 
 const PORT = process.env.PORT || 3000;
 
@@ -38,8 +39,8 @@ app.use("/refresh", refreshRoute);
 app.use("/logout", logoutRoute);
 app.get("/featured-fundraisers", getFeaturedFundraiser);
 app.use("/results", handleResults);
-// app.use("/save", saveRoute);
-app.use('/contactForm', contactFormRoutes);
+app.use("/contactForm", contactRoute);
+app.use("/save", saveRoute);
 
 app.use(errorHandler);
 // app.use("/contact"); //contactRoute
