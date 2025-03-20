@@ -42,7 +42,7 @@ const Quiz = () => {
 
       if (currentQuestion === quizQuestions.length - 1) {
         axios
-          .post("http://localhost:3000/results", { scores: updatedScores })
+          .post("https://fundforward-capstone-team-3.onrender.com/results", { scores: updatedScores })
           .then((response) => {
             navigate("/results", { state: { userPreferences: updatedScores } });
           })

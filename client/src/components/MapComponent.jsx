@@ -48,7 +48,7 @@ const MapComponent = () => {
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/maps/places", {
+        const response = await axios.get("https://fundforward-capstone-team-3.onrender.com/api/maps/places", {
           params: {
             lat: userLocation.lat,
             lng: userLocation.lng,

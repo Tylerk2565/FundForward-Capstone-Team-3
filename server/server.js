@@ -19,12 +19,16 @@ import getFeaturedFundraiser from "./controllers/api/getFeaturedFundraiser.js";
 import handleResults from "./controllers/api/results.js";
 // import Contact from "../client/src/pages/Contact.jsx";
 import path from 'path';
+import { fileURLToPath } from "url";
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
 app.use(cors(corsOptions));
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 

@@ -33,7 +33,7 @@ const Login = () => {
     // fetch the data from the server
     try {
       const res = await axios.post(
-        "http://localhost:3000/auth",
+        "https://fundforward-capstone-team-3.onrender.com/auth",
         JSON.stringify({
           user,
           pwd: password,

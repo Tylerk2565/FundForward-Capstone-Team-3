@@ -6,7 +6,7 @@ const useLogout = () => {
     const logout = async () => {
         setAuth({});
         try {
-            const response = await axios('http://localhost:3000/logout', {
+            const response = await axios('https://fundforward-capstone-team-3.onrender.com/logout', {
                 withCredentials: true
             });
         }catch(err) {
