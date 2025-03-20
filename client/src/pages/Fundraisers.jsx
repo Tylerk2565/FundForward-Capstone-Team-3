@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { FaBookmark } from "react-icons/fa";
+import useAuth from "../hooks/useAuth";
 
 const Fundraisers = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState(""); // Default search term
+  const { auth } = useAuth();
+
+  const loggedInUser = auth?.username // Adjust based on auth method
 
   const searchFundraisers = async (query) => {
     try {
@@ -32,6 +36,35 @@ const Fundraisers = () => {
     }
   };
 
+  const handleSave = async (proj) => {
+    if (!loggedInUser) {
+        alert("You must be logged in to save fundraisers.");
+        return;
+    }
+
+    console.log("Saving fundraiser:", proj.title);
+
+    try {
+        const saveData = {
+            post_id: proj.id,
+            username: loggedInUser, // Use actual logged-in user
+            post_desc: proj.summary, // Save the summary as the description
+            post_img: proj.image?.imagelink.find((img) => img.size === "medium")?.url || proj.image.imagelink[0].url
+        };
+
+        const response = await axios.post("http://localhost:3000/save", saveData, {
+            headers: { "Content-Type": "application/json" },
+        });
+
+        console.log("Fundraiser saved:", response.data);
+        alert("Fundraiser saved successfully!");
+    } catch (error) {
+        console.error("Error saving fundraiser:", error.response?.data || error.message);
+        alert("Failed to save fundraiser.");
+    }
+};
+
+
   useEffect(() => {
     searchFundraisers(searchTerm); // Fetch default projects on load
   }, []);
@@ -49,7 +82,12 @@ const Fundraisers = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <div className="max-w-7xl mx-auto p-6">
+      <motion.div 
+      className="max-w-7xl mx-auto p-6"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
         {/* Introduction Section */}
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-green-600">
@@ -93,37 +131,32 @@ const Fundraisers = () => {
           </p>
         )}
 
-        {/* Display Projects with Staggered Fade-in Animation */}
-        {!loading && projects.length > 0 ? (
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              visible: { transition: { staggerChildren: 0.2 } }, // Staggered fade-in
-            }}
-          >
-            {projects.map((proj, index) => (
-              <motion.div
-                key={proj.id}
-                className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl 
+      {/* Display Projects with Staggered Fade-in & Slide-up Animation */}
+      {!loading && projects.length > 0 ? (
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+          initial={{ opacity: 0, y: 50 }} // Grid slides up
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut", staggerChildren: 0.2 }} // Stagger children
+        >
+          {projects.map((proj, index) => (
+            <motion.div
+              key={proj.id}
+              className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl 
                 hover:scale-105 transition-all duration-300 transform"
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ duration: 0.5, delay: index * 0.1 }} // Delayed appearance
-              >
-                <div className="relative">
-                  {proj.image?.imagelink && proj.image.imagelink.length > 0 && (
-                    <img
-                      src={
-                        proj.image.imagelink.find(
-                          (img) => img.size === "medium"
-                        )?.url || proj.image.imagelink[0].url
-                      }
-                      alt={proj.title}
-                      className="w-full aspect-[4/3] object-cover rounded-lg transition-transform 
+              initial={{ opacity: 0, y: 50 }} // Cards slide up
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }} // Staggered appearance
+            >
+              <div className="relative">
+                {proj.image?.imagelink && proj.image.imagelink.length > 0 && (
+                  <img
+                    src={
+                      proj.image.imagelink.find((img) => img.size === "medium")
+                        ?.url || proj.image.imagelink[0].url
+                    }
+                    alt={proj.title}
+                    className="w-full aspect-[4/3] object-cover rounded-lg transition-transform 
                       duration-500 hover:scale-105"
                     />
                   )}
@@ -165,25 +198,32 @@ const Fundraisers = () => {
                   rel="noopener noreferrer"
                   className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg 
                   hover:bg-green-600 transition duration-200"
-                >
-                  View Project
-                </a>
-              </motion.div>
-            ))}
-          </motion.div>
-        ) : (
-          !loading && (
-            <p className="text-center text-gray-500 text-lg">
-              No projects found. Try searching for another cause!
-            </p>
-          )
-        )}
-      </div>
-    </div>
+              >
+                View Project
+              </a>
+              <button 
+                className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg 
+                  hover:bg-green-600 transition duration-200 m-1" 
+                onClick={() => handleSave(proj)}
+              >
+                Save
+              </button>
+            </motion.div>
+          ))}
+        </motion.div>
+      ) : (
+        !loading && (
+          <p className="text-center text-gray-500 text-lg">
+            No projects found. Try searching for another cause!
+          </p>
+        )
+      )}
+    </motion.div>
   );
 };
 
 export default Fundraisers;
+
 
 /*
 
