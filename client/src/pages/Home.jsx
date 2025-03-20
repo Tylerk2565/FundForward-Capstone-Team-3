@@ -6,6 +6,7 @@ import LoginModal from "../components/LoginModal";
 import Video from "../assets/Video.mp4";
 import useAuth from "../hooks/useAuth";
 import { FaBookmark } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const [projects, setProjects] = useState([]);
@@ -23,6 +24,12 @@ const Home = () => {
   };
   const handleCloseModal = () => {
     setShowLoginModal(false);
+  };
+
+  // Function to handle saving a project
+  const handleSave = (project) => {
+    // need to implement later
+    alert(`Project saved: ${project.title}`);
   };
 
   // Fetch featured projects from the API
@@ -156,65 +163,98 @@ const Home = () => {
         ) : error ? (
           <p className="text-center mt-6 text-red-500">{error}</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-12 relative">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-12 relative"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: { transition: { staggerChildren: 0.2 } },
+            }}
+          >
             {projects.map((project, index) => (
-              <div
+              <motion.div
                 key={project.id}
-                className={`bg-white shadow-lg rounded-lg p-4 relative transform transition-transform hover:scale-105 hover:shadow-xl ${
-                  index % 2 === 0
-                    ? "translate-x-4 -rotate-2"
-                    : "-translate-x-4 rotate-2"
-                }`}
-                style={{ boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)" }}
+                className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl hover:scale-105 transition-all duration-300 transform relative"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <img
-                  src={
-                    project.image?.imagelink?.[0]?.url ||
-                    "https://via.placeholder.com/400"
-                  }
-                  alt={project.title}
-                  className="rounded-md w-full h-48 object-cover"
-                />
-                <h3 className="text-lg font-semibold mt-4">{project.title}</h3>
-                <p className="text-gray-700 mt-2 text-sm">
-                  {project.summary || "No summary available."}
+                <div className="relative">
+                  {project.image?.imagelink &&
+                    project.image.imagelink.length > 0 && (
+                      <img
+                        src={
+                          project.image.imagelink.find(
+                            (img) => img.size === "medium"
+                          )?.url || project.image.imagelink[0].url
+                        }
+                        alt={project.title}
+                        className="w-full aspect-[4/3] object-cover rounded-lg transition-transform duration-500 hover:scale-105"
+                      />
+                    )}
+                </div>
+                <h2 className="text-xl font-semibold mt-4 text-gray-800">
+                  {project.title}
+                </h2>
+                <p className="text-gray-600 text-sm mt-2">
+                  {project.summary.split(" ").slice(0, 20).join(" ")}
+                  {project.summary.split(" ").length > 20 ? "..." : ""}
                 </p>
+                <p className="text-green-500 text-sm mt-2 font-medium">
+                  {project.country}
+                </p>
+
+                {/* Progress Bar */}
+                <div className="mt-4">
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-green-500 h-2.5 rounded-full"
+                      style={{
+                        width: `${(project.funding / project.goal) * 100}%`,
+                      }}
+                    ></div>
+                  </div>
+                  <p className="text-sm mt-1 text-gray-500">
+                    {Math.round((project.funding / project.goal) * 100)}% of
+                    goal reached
+                  </p>
+                </div>
 
                 {/* Action Buttons */}
                 <div className="mt-4 flex justify-between gap-4">
                   <button
-                    onClick={() => handleDonate(project)}
+                    onClick={() => alert(`Donate to ${project.title}`)}
                     className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300"
                   >
                     Donate
                   </button>
                   <button
-                    onClick={() => handleVolunteer(project)}
+                    onClick={() => alert(`Volunteer for ${project.title}`)}
                     className="bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition duration-300"
                   >
                     Volunteer
                   </button>
-                  <button
-                    onClick={() => handleSave(project)}
-                    className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-                  >
-                    Save
-                  </button>
                 </div>
 
-                <div className="mt-4">
-                  <a
-                    href={project.projectLink || "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 font-semibold hover:underline"
-                  >
-                    Learn More
-                  </a>
-                </div>
-              </div>
+                {/* Bookmark Icon for Save */}
+                <FaBookmark
+                  onClick={() => handleSave(project)}
+                  className="absolute bottom-4 right-4 text-2xl cursor-pointer transition-all duration-300 hover:text-green-600"
+                />
+
+                <a
+                  href={project.projectLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition duration-200"
+                >
+                  View Project
+                </a>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </section>
 
