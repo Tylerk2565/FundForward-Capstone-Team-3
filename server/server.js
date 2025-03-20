@@ -18,6 +18,7 @@ import verifyJWT from "./middleware/verifyJWT.js";
 import getFeaturedFundraiser from "./controllers/api/getFeaturedFundraiser.js";
 import handleResults from "./controllers/api/results.js";
 // import Contact from "../client/src/pages/Contact.jsx";
+import path from 'path';
 
 const PORT = process.env.PORT || 3000;
 
@@ -25,7 +26,8 @@ const app = express();
 
 app.use(cors(corsOptions));
 
-// app.use(express.static(path.join(__dirname, "../client/dist")));
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
@@ -40,8 +42,6 @@ app.use("/results", handleResults);
 
 app.use(errorHandler);
 // app.use("/contact"); //contactRoute
-
-app.use(errorHandler);
 
 // Google Maps Places API Route
 app.get("/api/maps/places", async (req, res) => {
