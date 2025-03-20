@@ -89,7 +89,7 @@ const MapComponent = () => {
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={userLocation}
-          zoom={15}
+          zoom={13}
           onLoad={(map) => {
             setMapInstance(map);
             mapRef.current = map;
