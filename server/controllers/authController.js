@@ -19,6 +19,7 @@ const handleLogin = async (req, res) => {
     if(userRows.length === 0) return res.status(401).send({"error": "Username or password are invalid"});
 
     const foundUser = userRows[0];
+    const username = foundUser.username;
     console.log(foundUser);
 
     const [roleRows] = await connection.query(
@@ -73,7 +74,7 @@ const handleLogin = async (req, res) => {
         // send refresh token as a cookie in htttp header
         res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
 
-        res.json({ roles, accessToken }).status(201);
+        res.json({ roles, accessToken, username }).status(201);
     }    
     
     } catch(error) {

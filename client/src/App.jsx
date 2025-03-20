@@ -15,6 +15,7 @@ import Volunteer from "./pages/Volunteer";
 import { LoadScript } from "@react-google-maps/api";
 import About from "./pages/About";
 import AdminMessages from "./pages/AdminMessages";
+import RequireAuth from "./components/requireAuth";
 
 const App = () => {
   const libraryArray = ["places"];
@@ -29,21 +30,22 @@ const App = () => {
           <Navbar />
           <div className="flex-grow">
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/fundraiser" element={<Fundraisers />} />
-              <Route path="/volunteer" element={<Volunteer />} />
-              <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/about" element={<About />} />
-
-              <Route path="/results" element={<Results />} />
               <Route element={<PersistLogin />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/results" element={<Results />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/fundraiser" element={<Fundraisers />} />
+                <Route path="/volunteer" element={<Volunteer />} />
+                <Route path="/quiz" element={<QuizPage />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+
+                <Route path="/admin-messages" element={<AdminMessages />} />
+
               </Route>
 
-              <Route path="/register" element={<Register />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/admin-messages" element={<AdminMessages />} />
             </Routes>
           </div>
           <Footer />
