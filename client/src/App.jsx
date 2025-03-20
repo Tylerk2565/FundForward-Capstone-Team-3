@@ -10,12 +10,12 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import PersistLogin from "./components/PersistLogin";
 import Contact from "./pages/Contact";
-import Results from "./pages/Results";
 import Volunteer from "./pages/Volunteer";
 import { LoadScript } from "@react-google-maps/api";
 import About from "./pages/About";
 import AdminMessages from "./pages/AdminMessages";
-import RequireAuth from "./components/requireAuth";
+import AdminHomePage from "./pages/AdminHome";
+import Results from "./pages/Results";
 
 const ROLES = {
   User: 'User',
@@ -38,7 +38,6 @@ const App = () => {
               <Route element={<PersistLogin />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/results" element={<Results />} />
-                
                 <Route path="/fundraiser" element={<Fundraisers />} />
                 <Route path="/volunteer" element={<Volunteer />} />
                 <Route path="/quiz" element={<QuizPage />} />
@@ -53,10 +52,10 @@ const App = () => {
 
                 <Route element={<RequireAuth allowedRoles={[ROLES.Admin]}/>}>
                   <Route path="/admin-messages" element={<AdminMessages />} />
+                  <Route path="/admin" element={<AdminHomePage />} />
                 </Route>
 
               </Route>
-
             </Routes>
           </div>
           <Footer />
