@@ -5,19 +5,23 @@ import { motion } from "framer-motion"; // Import Framer Motion
 const Fundraisers = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("Education"); // Default search term
+  const [searchTerm, setSearchTerm] = useState(""); // Default search term
 
   const searchFundraisers = async (query) => {
     try {
       setLoading(true);
       console.log("Searching fundraisers for:", query);
-      const response = await axios.get(`http://localhost:3000/api/fundraiser?q=${query}`, {
-        headers: { Accept: "application/json" },
-      });
+      const response = await axios.get(
+        `http://localhost:3000/api/fundraiser?q=${query}`,
+        {
+          headers: { Accept: "application/json" },
+        }
+      );
 
       if (response.data.success) {
         console.log(response.data.data.search.response.projects.project);
-        const projectData = response.data.data?.search.response.projects?.project || [];
+        const projectData =
+          response.data.data?.search.response.projects?.project || [];
         setProjects(projectData);
       }
     } catch (error) {
@@ -45,27 +49,32 @@ const Fundraisers = () => {
     >
       {/* Introduction Section */}
       <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-green-600">Support Meaningful Fundraisers</h1>
+        <h1 className="text-4xl font-bold text-green-600">
+          Support Meaningful Fundraisers
+        </h1>
         <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-          Fundraisers help provide critical resources to communities in need. 
-          Whether it’s for education, healthcare, disaster relief, or community development, 
-          every contribution makes a difference. Explore projects that align with your values 
-          and be part of the change.
+          Fundraisers help provide critical resources to communities in need.
+          Whether it’s for education, healthcare, disaster relief, or community
+          development, every contribution makes a difference. Explore projects
+          that align with your values and be part of the change.
         </p>
       </div>
 
       {/* Search Form */}
-      <form onSubmit={handleSearch} className="flex items-center justify-center gap-4 mb-8">
-        <input 
-          type="text" 
-          placeholder="Search for fundraisers..." 
-          value={searchTerm} 
-          onChange={(e) => setSearchTerm(e.target.value)} 
+      <form
+        onSubmit={handleSearch}
+        className="flex items-center justify-center gap-4 mb-8"
+      >
+        <input
+          type="text"
+          placeholder="Search for fundraisers..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full max-w-md p-4 rounded-lg border border-gray-300 shadow-sm 
             focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300"
         />
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="bg-green-600 text-white px-6 py-3 rounded-lg shadow-md 
             hover:bg-green-500 transition duration-300"
         >
@@ -74,18 +83,22 @@ const Fundraisers = () => {
       </form>
 
       {/* Loading State */}
-      {loading && <p className="text-center text-gray-500 text-lg">Loading fundraisers...</p>}
+      {loading && (
+        <p className="text-center text-gray-500 text-lg">
+          Loading fundraisers...
+        </p>
+      )}
 
       {/* Display Projects with Staggered Fade-in & Slide-up Animation */}
       {!loading && projects.length > 0 ? (
-        <motion.div 
+        <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
           initial={{ opacity: 0, y: 50 }} // Grid slides up
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut", staggerChildren: 0.2 }} // Stagger children
         >
           {projects.map((proj, index) => (
-            <motion.div 
+            <motion.div
               key={proj.id}
               className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl 
                 hover:scale-105 transition-all duration-300 transform"
@@ -95,19 +108,27 @@ const Fundraisers = () => {
             >
               <div className="relative">
                 {proj.image?.imagelink && proj.image.imagelink.length > 0 && (
-                  <img 
-                    src={proj.image.imagelink.find(img => img.size === "medium")?.url || proj.image.imagelink[0].url} 
-                    alt={proj.title} 
+                  <img
+                    src={
+                      proj.image.imagelink.find((img) => img.size === "medium")
+                        ?.url || proj.image.imagelink[0].url
+                    }
+                    alt={proj.title}
                     className="w-full aspect-[4/3] object-cover rounded-lg transition-transform 
                       duration-500 hover:scale-105"
                   />
                 )}
               </div>
-              <h2 className="text-xl font-semibold mt-4 text-gray-800">{proj.title}</h2>
+              <h2 className="text-xl font-semibold mt-4 text-gray-800">
+                {proj.title}
+              </h2>
               <p className="text-gray-600 text-sm mt-2">
-                {proj.summary.split(" ").slice(0, 20).join(" ")}{proj.summary.split(" ").length > 20 ? "..." : ""}
+                {proj.summary.split(" ").slice(0, 20).join(" ")}
+                {proj.summary.split(" ").length > 20 ? "..." : ""}
               </p>
-              <p className="text-green-500 text-sm mt-2 font-medium">{proj.country}</p>
+              <p className="text-green-500 text-sm mt-2 font-medium">
+                {proj.country}
+              </p>
 
               {/* Progress Bar */}
               <div className="mt-4">
@@ -118,14 +139,15 @@ const Fundraisers = () => {
                   ></div>
                 </div>
                 <p className="text-sm mt-1 text-gray-500">
-                  {Math.round((proj.funding / proj.goal) * 100)}% of goal reached
+                  {Math.round((proj.funding / proj.goal) * 100)}% of goal
+                  reached
                 </p>
               </div>
 
-              <a 
-                href={proj.projectLink} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={proj.projectLink}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg 
                   hover:bg-green-600 transition duration-200"
               >
@@ -135,21 +157,17 @@ const Fundraisers = () => {
           ))}
         </motion.div>
       ) : (
-        !loading && <p className="text-center text-gray-500 text-lg">No projects found. Try searching for another cause!</p>
+        !loading && (
+          <p className="text-center text-gray-500 text-lg">
+            No projects found. Try searching for another cause!
+          </p>
+        )
       )}
     </motion.div>
   );
 };
 
 export default Fundraisers;
-
-
-
-
-
-
-
-
 
 /*
 

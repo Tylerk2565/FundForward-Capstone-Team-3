@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import quizQuestions from "./questions";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const initialCategoryScores = {
   A: 0,
@@ -12,6 +13,8 @@ const initialCategoryScores = {
 };
 
 const Quiz = () => {
+  const navigate = useNavigate();
+
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -23,7 +26,7 @@ const Quiz = () => {
     setSelectedAnswer(null);
   }, [currentQuestion]);
 
-  // Based on what option the user selects, it selects the id of that option from our quizQuestions in the questions.js
+  // Based on user's input, it selects the id of that option from our quizQuestions in the questions.js
   const handleAnswerSelect = (id, value) => {
     setSelectedAnswer({ id, value });
   };
@@ -31,38 +34,37 @@ const Quiz = () => {
   const handleSubmit = async () => {
     if (!selectedAnswer) return;
 
-    const finalScores = {
-      // Creates a new object that includes all properties from categoryScores and increments the score for selected value/answer
-      ...categoryScores,
-      [selectedAnswer.value]: categoryScores[selectedAnswer.value] + 1,
-    };
+    setCategoryScores((prevScores) => {
+      const updatedScores = {
+        ...prevScores,
+        [selectedAnswer.value]: prevScores[selectedAnswer.value] + 1,
+      };
 
-    setCategoryScores(finalScores);
-
-    // Sends a post request when the last question is answered
-    if (currentQuestion === quizQuestions.length - 1) {
-      try {
-        const response = await axios.post("http://localhost:3000/results", {
-          scores: finalScores,
-        });
-        setRecommendation(response.data.recommendation);
-        setSubmitted(true);
-      } catch (err) {
-        console.log("Error Submitting Quiz", err);
+      if (currentQuestion === quizQuestions.length - 1) {
+        axios
+          .post("http://localhost:3000/results", { scores: updatedScores })
+          .then((response) => {
+            navigate("/results", { state: { userPreferences: updatedScores } });
+          })
+          .catch((err) => console.log("Error submitting quiz:", err));
+      } else {
+        setCurrentQuestion(currentQuestion + 1);
       }
-    } else {
-      setCurrentQuestion(currentQuestion + 1);
-    }
+
+      return updatedScores;
+    });
   };
 
   const getResultMessage = () => {
-    if (recommendation) return `Your result is ${recommendation}`;
+    return recommendation
+      ? `Your result is ${recommendation}`
+      : "Calculating results...";
   };
 
-  const getUser = () => {
-    // implement this later
-    return true;
-  };
+  // const getUser = () => {
+  //   // implement this later
+  //   return true;
+  // };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 p-6">

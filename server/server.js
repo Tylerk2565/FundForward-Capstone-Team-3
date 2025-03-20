@@ -7,30 +7,39 @@ import cors from "cors";
 import mysql from "mysql2";
 import corsOptions from "./config/corsOptions.js";
 import cookieParser from "cookie-parser";
-import registerRoute from './routes/register.js'
-import authRoute from './routes/auth.js'
-import apiRoute from './routes/api/fundraiser.js'
-import logoutRoute from './routes/logout.js'
+import registerRoute from "./routes/register.js";
+import authRoute from "./routes/auth.js";
+import apiRoute from "./routes/api/fundraiser.js";
+import logoutRoute from "./routes/logout.js";
 import errorHandler from "./middleware/errorHandler.js";
-import refreshRoute from './routes/refresh.js'
-import pool from './config/dbConn.js'
+import refreshRoute from "./routes/refresh.js";
+import pool from "./config/dbConn.js";
 import verifyJWT from "./middleware/verifyJWT.js";
+import getFeaturedFundraiser from "./controllers/api/getFeaturedFundraiser.js";
+import handleResults from "./controllers/api/results.js";
+// import Contact from "../client/src/pages/Contact.jsx";
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
 app.use(cors(corsOptions));
+
 // app.use(express.static(path.join(__dirname, "../client/dist")));
-app.use(express.urlencoded({ extended:false }))
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/register', registerRoute)
-app.use('/auth', authRoute)
-app.use('/api', apiRoute)
-app.use('/refresh', refreshRoute)
-app.use('/logout', logoutRoute)
+app.use("/register", registerRoute);
+app.use("/auth", authRoute);
+app.use("/api", apiRoute);
+app.use("/refresh", refreshRoute);
+app.use("/logout", logoutRoute);
+app.get("/featured-fundraisers", getFeaturedFundraiser);
+app.use("/results", handleResults);
+
+app.use(errorHandler);
+// app.use("/contact"); //contactRoute
 
 app.use(errorHandler);
 
@@ -40,7 +49,9 @@ app.get("/api/maps/places", async (req, res) => {
   const MAP_API_KEY = process.env.GOOGLE_MAPS_API_KEY; // Store your API key in .env
 
   if (!lat || !lng) {
-    return res.status(400).json({ error: "Latitude and longitude are required" });
+    return res
+      .status(400)
+      .json({ error: "Latitude and longitude are required" });
   }
 
   try {
@@ -63,14 +74,14 @@ app.get("/api/maps/places", async (req, res) => {
   }
 });
 
-app.all('*', (req, res) => {
-  res.status(404)
-  if(req.accepts('html')) {
-      res.send('404 Page'); //200 code by default
-  } else if(req.accepts('json')) {
-      res.json({ error: '404 Not Found' }); //200 code by default
+app.all("*", (req, res) => {
+  res.status(404);
+  if (req.accepts("html")) {
+    res.send("404 Page"); //200 code by default
+  } else if (req.accepts("json")) {
+    res.json({ error: "404 Not Found" }); //200 code by default
   } else {
-      res.type('txt').send('404 Not Found')
+    res.type("txt").send("404 Not Found");
   }
 });
 
