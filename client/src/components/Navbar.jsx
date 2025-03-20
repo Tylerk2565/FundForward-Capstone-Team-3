@@ -8,6 +8,8 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { auth } = useAuth();
 
+  const isLoggedIn = auth?.username || auth?.accessToken;
+
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   }
@@ -100,13 +102,40 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li>
+
+                {isLoggedIn ? (
+              <li className="flex flex-col items-center">
               <NavLink
-                className="block text-sm px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-100 w-full text-center"
-                to="/login"
+                className="flex flex-col items-center text-sm px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-100 w-full"
+                to="/profile"
               >
-                <UserIcon className="h-5 w-5 mx-auto" />
-                {auth?.username && <span className="text-black">{auth.username}</span>}
+                <UserIcon className="h-8 w-8" />
+                {auth?.username && (
+                  <span className="block text-black">{auth.username}</span>
+                )}
               </NavLink>
+            </li>
+            ) : (
+              <>
+                <li>
+                  <NavLink
+                    className="block text-sm px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-100 w-full text-center"
+                    to="/login"
+                  >
+                    Login
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="block text-sm px-4 py-2 transition duration-300 ease-in-out bg-green-500 text-white hover:bg-green-600 w-full text-center rounded-md mt-2 mb-2 p-2"
+                    to="/register"
+                  >
+                    Sign Up
+                  </NavLink>
+                </li>
+              </>
+            )}
+              {/* </NavLink> */}
             </li>
           </ul>
         </div>
@@ -125,12 +154,31 @@ const Navbar = () => {
           >
             About
           </NavLink>
-          <NavLink
-            className="relative px-3 py-2 rounded transition duration-300 ease-in-out hover:bg-gray-100"
-            to="/login"
-          >
-            <UserIcon className="h-5 w-5" />
-          </NavLink>
+
+          {isLoggedIn ? (
+    <NavLink
+      className="relative px-3 py-2 rounded transition duration-300 ease-in-out hover:bg-gray-100 flex items-center space-x-2"
+      to="/profile"
+    >
+      <UserIcon className="h-5 w-5" />
+      {auth?.username && <span>{auth.username}</span>}
+    </NavLink>
+  ) : (
+    <>
+      <NavLink
+        className="relative px-3 py-2 rounded transition duration-300 ease-in-out hover:bg-gray-100"
+        to="/login"
+      >
+        Login
+      </NavLink>
+      <NavLink
+        className="relative px-3 py-2 rounded transition duration-300 ease-in-out bg-green-500 text-white hover:bg-green-600"
+        to="/register"
+      >
+        Sign Up
+      </NavLink>
+    </>
+  )}
         </div>
       </div>
     </nav>

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Dialog } from "@headlessui/react";
+import useAuth from "../hooks/useAuth";
 
 const USER_REGEX = /^[a-zA-Z0-9]{3,}$/;
 
@@ -14,6 +15,7 @@ const NAME_REGEX = /^[A-Za-z]+$/;
 
 const Register = () => {
   const userRef = useRef();
+  const { auth } = useAuth();
 
   const [user, setUser] = useState("");
   const [validName, setValidName] = useState(false);
@@ -38,6 +40,14 @@ const Register = () => {
 
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("here's the auth bois", auth);
+    if (auth.accessToken) {
+      //redirect to home page
+      navigate("/profile");
+    }
+  }, [auth]);
 
   // Validate inputs in real-time
   const handleUserChange = (e) => {
