@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { FaCheck, FaReply, FaTrashAlt, FaBookmark } from "react-icons/fa";
+import { FaCheck, FaReply, FaTrashAlt } from "react-icons/fa";
 
 const AdminMessages = () => {
   const [messages, setMessages] = useState([]);
@@ -28,25 +28,38 @@ const AdminMessages = () => {
     getMessages();
   }, []);
 
-  const handleDelete = (id) => {
-    setMessages(messages.filter((msg) => msg.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3000/contactForm/${id}`);
+      setMessages(messages.filter((msg) => msg.id !== id));
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      setError("Error deleting message");
+    }
   };
 
-  const handleMarkAsRead = (id) => {
-    setMessages(
-      messages.map((msg) => (msg.id === id ? { ...msg, isRead: true } : msg))
-    );
+  const handleMarkAsRead = async (id) => {
+    try {
+      await axios.patch(`http://localhost:3000/contactForm/markAsRead/${id}`);
+      setMessages(
+        messages.map((msg) => (msg.id === id ? { ...msg, isRead: true } : msg))
+      );
+    } catch (error) {
+      console.error("Error marking message as read:", error);
+      setError("Error marking message as read");
+    }
   };
 
-  const handleReply = (id) => {
-    alert(`Replying to message: ${id}`);
+  const handleReply = (name) => {
+    alert(`Reply sent to: ${name}`);
   };
 
   const toggleFilter = (status) => {
     setFilter(status);
   };
 
-
+  const filteredMessages =
+    filter === "unread" ? messages.filter((msg) => !msg.isRead) : messages;
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -104,8 +117,8 @@ const AdminMessages = () => {
               </tr>
             </thead>
             <tbody>
-              {messages.length > 0 ? (
-                messages.map((msg) => (
+              {filteredMessages.length > 0 ? (
+                filteredMessages.map((msg) => (
                   <tr
                     key={msg.id}
                     className={`border-b hover:bg-gray-100 ${
@@ -120,10 +133,10 @@ const AdminMessages = () => {
                         : msg.comment}
                     </td>
                     <td className="py-4 px-6">
-                      {new Date(msg.date).toLocaleDateString()}
+                      {new Date(msg.created_at).toLocaleDateString()}
                     </td>
                     <td className="py-4 px-6 flex gap-3">
-                      {/* {!msg.isRead && (
+                      {!msg.isRead && (
                         <button
                           onClick={() => handleMarkAsRead(msg.id)}
                           className="text-green-500 hover:text-green-700 flex items-center"
@@ -131,9 +144,9 @@ const AdminMessages = () => {
                           <FaCheck className="mr-1" />
                           Mark as Read
                         </button>
-                      )} */}
+                      )}
                       <button
-                        onClick={() => handleReply(msg.id)}
+                        onClick={() => handleReply(msg.name)}
                         className="text-blue-500 hover:text-blue-700 flex items-center"
                       >
                         <FaReply className="mr-1" />

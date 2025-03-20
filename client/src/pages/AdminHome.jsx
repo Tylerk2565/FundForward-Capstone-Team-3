@@ -6,6 +6,8 @@ import {
   FaBell,
 } from "react-icons/fa";
 
+import { NavLink } from "react-router-dom";
+
 const AdminHomePage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -24,12 +26,12 @@ const AdminHomePage = () => {
                 </a>
               </li>
               <li className="mb-4">
-                <a
-                  href="/admin-messages"
+                <NavLink
+                  to="/admin-messages"
                   className="text-lg hover:text-blue-300 transition duration-300"
                 >
                   Messages
-                </a>
+                </NavLink>
               </li>
               <li className="mb-4">
                 <a
