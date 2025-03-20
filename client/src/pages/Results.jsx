@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { FaBookmark } from "react-icons/fa";
+import { motion } from "framer-motion"; // Import Framer Motion
 
 const CATEGORY_MAPPING = {
   A: "education",
@@ -26,7 +27,7 @@ const Results = () => {
     volunteerProjects: [],
   });
 
-  // Simulate fetching projects
+  // Fetching projects
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -107,27 +108,53 @@ const Results = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
         {projects.length > 0 ? (
-          projects.map((project) => {
+          projects.map((project, index) => {
             // Check if the project is saved
             const isSaved = user.savedProjects.some((p) => p.id === project.id);
             return (
-              <div
+              <motion.div
                 key={project.id}
-                className="bg-white shadow-md p-4 rounded-lg relative"
+                className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl hover:scale-105 transition-all duration-300 transform relative"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <img
-                  src={
-                    project.image?.imagelink[0]?.url ||
-                    "https://via.placeholder.com/400"
-                  }
-                  alt={project.title}
-                  className="rounded-md w-full h-48 object-cover"
-                />
-                <h3 className="text-lg font-semibold mt-4">{project.title}</h3>
+                <div className="relative">
+                  {project.image?.imagelink &&
+                    project.image.imagelink.length > 0 && (
+                      <img
+                        src={
+                          project.image.imagelink.find(
+                            (img) => img.size === "medium"
+                          )?.url || project.image.imagelink[0].url
+                        }
+                        alt={project.title}
+                        className="w-full aspect-[4/3] object-cover rounded-lg transition-transform duration-500 hover:scale-105"
+                      />
+                    )}
+                </div>
+                <h3 className="text-lg font-semibold mt-4 text-gray-800">
+                  {project.title}
+                </h3>
                 <p className="text-gray-700 mt-2 text-sm">
                   {project.summary || "No summary available."}
                 </p>
 
+                {/* Progress Bar */}
+                <div className="mt-4">
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-green-500 h-2.5 rounded-full"
+                      style={{
+                        width: `${(project.funding / project.goal) * 100}%`,
+                      }}
+                    ></div>
+                  </div>
+                  <p className="text-sm mt-1 text-gray-500">
+                    {Math.round((project.funding / project.goal) * 100)}% of
+                    goal reached
+                  </p>
+                </div>
                 <div className="mt-4">
                   <button
                     onClick={() => handleDonate(project)}
@@ -143,7 +170,7 @@ const Results = () => {
                   </button>
                 </div>
 
-                {/* Bookmark Icon */}
+                {/* Bookmark Icon for Save */}
                 <FaBookmark
                   onClick={() => handleSave(project)}
                   className={`absolute bottom-4 right-4 text-2xl cursor-pointer transition-all duration-300 ${
@@ -155,15 +182,15 @@ const Results = () => {
 
                 <div className="mt-4">
                   <a
-                    href={project.projectLink || "#"}
+                    href={project.projectLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 font-semibold hover:underline"
+                    className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition duration-200"
                   >
-                    Learn More
+                    View Project
                   </a>
                 </div>
-              </div>
+              </motion.div>
             );
           })
         ) : (

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { motion } from "framer-motion"; // Import Framer Motion
+import { motion } from "framer-motion";
+import { FaBookmark } from "react-icons/fa";
 
 const Fundraisers = () => {
   const [projects, setProjects] = useState([]);
@@ -40,128 +41,144 @@ const Fundraisers = () => {
     searchFundraisers(searchTerm);
   };
 
+  // Function to handle saving a project
+  const handleSave = (project) => {
+    // need to implement later
+    alert(`Project saved: ${project.title}`);
+  };
+
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      {/* Introduction Section */}
-      <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-green-600">
-          Support Meaningful Fundraisers
-        </h1>
-        <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-          Fundraisers help provide critical resources to communities in need.
-          Whether it’s for education, healthcare, disaster relief, or community
-          development, every contribution makes a difference. Explore projects
-          that align with your values and be part of the change.
-        </p>
-      </div>
-
-      {/* Search Form */}
-      <form
-        onSubmit={handleSearch}
-        className="flex items-center justify-center gap-4 mb-8"
-      >
-        <input
-          type="text"
-          placeholder="Search for fundraisers..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full max-w-md p-4 rounded-lg border border-gray-300 shadow-sm 
-            focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300"
-        />
-        <button
-          type="submit"
-          className="bg-green-600 text-white px-6 py-3 rounded-lg shadow-md 
-            hover:bg-green-500 transition duration-300"
-        >
-          Search
-        </button>
-      </form>
-
-      {/* Loading State */}
-      {loading && (
-        <p className="text-center text-gray-500 text-lg">
-          Loading fundraisers...
-        </p>
-      )}
-
-      {/* Display Projects with Staggered Fade-in Animation */}
-      {!loading && projects.length > 0 ? (
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            visible: { transition: { staggerChildren: 0.2 } }, // Staggered fade-in
-          }}
-        >
-          {projects.map((proj, index) => (
-            <motion.div
-              key={proj.id}
-              className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl 
-                hover:scale-105 transition-all duration-300 transform"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 0.5, delay: index * 0.1 }} // Delayed appearance
-            >
-              <div className="relative">
-                {proj.image?.imagelink && proj.image.imagelink.length > 0 && (
-                  <img
-                    src={
-                      proj.image.imagelink.find((img) => img.size === "medium")
-                        ?.url || proj.image.imagelink[0].url
-                    }
-                    alt={proj.title}
-                    className="w-full aspect-[4/3] object-cover rounded-lg transition-transform 
-                      duration-500 hover:scale-105"
-                  />
-                )}
-              </div>
-              <h2 className="text-xl font-semibold mt-4 text-gray-800">
-                {proj.title}
-              </h2>
-              <p className="text-gray-600 text-sm mt-2">
-                {proj.summary.split(" ").slice(0, 20).join(" ")}
-                {proj.summary.split(" ").length > 20 ? "..." : ""}
-              </p>
-              <p className="text-green-500 text-sm mt-2 font-medium">
-                {proj.country}
-              </p>
-
-              {/* Progress Bar */}
-              <div className="mt-4">
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div
-                    className="bg-green-500 h-2.5 rounded-full"
-                    style={{ width: `${(proj.funding / proj.goal) * 100}%` }}
-                  ></div>
-                </div>
-                <p className="text-sm mt-1 text-gray-500">
-                  {Math.round((proj.funding / proj.goal) * 100)}% of goal
-                  reached
-                </p>
-              </div>
-
-              <a
-                href={proj.projectLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg 
-                  hover:bg-green-600 transition duration-200"
-              >
-                View Project
-              </a>
-            </motion.div>
-          ))}
-        </motion.div>
-      ) : (
-        !loading && (
-          <p className="text-center text-gray-500 text-lg">
-            No projects found. Try searching for another cause!
+    <div className="bg-gray-100 min-h-screen">
+      <div className="max-w-7xl mx-auto p-6">
+        {/* Introduction Section */}
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-bold text-green-600">
+            Support Meaningful Fundraisers
+          </h1>
+          <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+            Fundraisers help provide critical resources to communities in need.
+            Whether it’s for education, healthcare, disaster relief, or
+            community development, every contribution makes a difference.
+            Explore projects that align with your values and be part of the
+            change.
           </p>
-        )
-      )}
+        </div>
+
+        {/* Search Form */}
+        <form
+          onSubmit={handleSearch}
+          className="flex items-center justify-center gap-4 mb-8"
+        >
+          <input
+            type="text"
+            placeholder="Search for fundraisers..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full max-w-md p-4 rounded-lg border border-gray-300 shadow-sm 
+            focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300"
+          />
+          <button
+            type="submit"
+            className="bg-green-600 text-white px-6 py-3 rounded-lg shadow-md 
+            hover:bg-green-500 transition duration-300"
+          >
+            Search
+          </button>
+        </form>
+
+        {/* Loading State */}
+        {loading && (
+          <p className="text-center text-gray-500 text-lg">
+            Loading fundraisers...
+          </p>
+        )}
+
+        {/* Display Projects with Staggered Fade-in Animation */}
+        {!loading && projects.length > 0 ? (
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: { transition: { staggerChildren: 0.2 } }, // Staggered fade-in
+            }}
+          >
+            {projects.map((proj, index) => (
+              <motion.div
+                key={proj.id}
+                className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl 
+                hover:scale-105 transition-all duration-300 transform"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+                transition={{ duration: 0.5, delay: index * 0.1 }} // Delayed appearance
+              >
+                <div className="relative">
+                  {proj.image?.imagelink && proj.image.imagelink.length > 0 && (
+                    <img
+                      src={
+                        proj.image.imagelink.find(
+                          (img) => img.size === "medium"
+                        )?.url || proj.image.imagelink[0].url
+                      }
+                      alt={proj.title}
+                      className="w-full aspect-[4/3] object-cover rounded-lg transition-transform 
+                      duration-500 hover:scale-105"
+                    />
+                  )}
+                </div>
+                <h2 className="text-xl font-semibold mt-4 text-gray-800">
+                  {proj.title}
+                </h2>
+                <p className="text-gray-600 text-sm mt-2">
+                  {proj.summary.split(" ").slice(0, 20).join(" ")}
+                  {proj.summary.split(" ").length > 20 ? "..." : ""}
+                </p>
+                <p className="text-green-500 text-sm mt-2 font-medium">
+                  {proj.country}
+                </p>
+
+                {/* Progress Bar */}
+                <div className="mt-4">
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-green-500 h-2.5 rounded-full"
+                      style={{ width: `${(proj.funding / proj.goal) * 100}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-sm mt-1 text-gray-500">
+                    {Math.round((proj.funding / proj.goal) * 100)}% of goal
+                    reached
+                  </p>
+                </div>
+
+                {/* Bookmark Icon for Save */}
+                <FaBookmark
+                  onClick={() => handleSave(project)}
+                  className="absolute bottom-4 right-4 text-2xl cursor-pointer transition-all duration-300 hover:text-green-600"
+                />
+
+                <a
+                  href={proj.projectLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg 
+                  hover:bg-green-600 transition duration-200"
+                >
+                  View Project
+                </a>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          !loading && (
+            <p className="text-center text-gray-500 text-lg">
+              No projects found. Try searching for another cause!
+            </p>
+          )
+        )}
+      </div>
     </div>
   );
 };
