@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion"; // Import Framer Motion
+import useAuth from "../hooks/useAuth";
 
 const Fundraisers = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState(""); // Default search term
+  const { auth } = useAuth();
+
+  const loggedInUser = auth?.username // Adjust based on auth method
 
   const searchFundraisers = async (query) => {
     try {
@@ -30,6 +34,35 @@ const Fundraisers = () => {
       setLoading(false);
     }
   };
+
+  const handleSave = async (proj) => {
+    if (!loggedInUser) {
+        alert("You must be logged in to save fundraisers.");
+        return;
+    }
+
+    console.log("Saving fundraiser:", proj.title);
+
+    try {
+        const saveData = {
+            post_id: proj.id,
+            username: loggedInUser, // Use actual logged-in user
+            post_desc: proj.summary, // Save the summary as the description
+            post_img: proj.image?.imagelink.find((img) => img.size === "medium")?.url || proj.image.imagelink[0].url
+        };
+
+        const response = await axios.post("http://localhost:3000/save", saveData, {
+            headers: { "Content-Type": "application/json" },
+        });
+
+        console.log("Fundraiser saved:", response.data);
+        alert("Fundraiser saved successfully!");
+    } catch (error) {
+        console.error("Error saving fundraiser:", error.response?.data || error.message);
+        alert("Failed to save fundraiser.");
+    }
+};
+
 
   useEffect(() => {
     searchFundraisers(searchTerm); // Fetch default projects on load
@@ -153,6 +186,13 @@ const Fundraisers = () => {
               >
                 View Project
               </a>
+              <button 
+                className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg 
+                  hover:bg-green-600 transition duration-200 m-1" 
+                onClick={() => handleSave(proj)}
+              >
+                Save
+              </button>
             </motion.div>
           ))}
         </motion.div>
@@ -168,6 +208,7 @@ const Fundraisers = () => {
 };
 
 export default Fundraisers;
+
 
 /*
 
