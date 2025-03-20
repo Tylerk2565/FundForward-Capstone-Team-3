@@ -28,6 +28,9 @@ const handleRefreshToken = async(req, res) => {
     if(rows.length === 0) return res.sendStatus(403); // Forbidden
     
     const foundUser = rows[0];
+
+    const username = foundUser.username;
+
     // get roles from db based on user_id
     const [roleRows] = await connection.query(
         `SELECT r.role_name FROM roles r
@@ -54,7 +57,7 @@ const handleRefreshToken = async(req, res) => {
                 {expiresIn: '1m'}
             );
             // send back roles and accessToken
-            res.json({roles, accessToken})
+            res.json({roles, accessToken, username});
         }
     )
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,32 @@ const Contact = () => {
 
   const [submitted, setSubmitted] = useState(false);
 
+  const handleContactForm = async () => {
+
+    // fetch the data from the server
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/contactForm",
+        JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          comment: formData.message,
+        }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        });
+      console.log(JSON.stringify(res?.data));
+      setFormData({ name: "", email: "", message: "" });
+      alert("Your message has been sent successfully!");
+    } catch (err) {
+      console.log(err);
+      if (!err?.response) {
+        setError("No server response");
+      }
+    }
+  };
+
   // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,14 +45,7 @@ const Contact = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitted(true);
-
-    // Simulate sending the form data
-    setTimeout(() => {
-      alert("Your message has been sent successfully!");
-      setFormData({ name: "", email: "", message: "" });
-      setSubmitted(false);
-    }, 1000);
+    handleContactForm();
   };
 
   return (

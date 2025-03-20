@@ -19,10 +19,11 @@ const handleLogin = async (req, res) => {
     if(userRows.length === 0) return res.status(401).send({"error": "Username or password are invalid"});
 
     const foundUser = userRows[0];
+    const username = foundUser.username;
     console.log(foundUser);
 
     const [roleRows] = await connection.query(
-        `SELECT r.role_value FROM roles r
+        `SELECT r.role_name FROM roles r
         JOIN user_roles ur ON r.id = ur.role_id
         WHERE ur.user_id = ?
         `,
@@ -30,7 +31,7 @@ const handleLogin = async (req, res) => {
     )
     console.log(roleRows)
 
-    const roles = roleRows.map(row => row.role_value)
+    const roles = roleRows.map(row => row.role_name)
     console.log(roles)
 
     // evaluate password
@@ -73,7 +74,7 @@ const handleLogin = async (req, res) => {
         // send refresh token as a cookie in htttp header
         res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
 
-        res.json({ roles, accessToken }).status(201);
+        res.json({ roles, accessToken, username }).status(201);
     }    
     
     } catch(error) {

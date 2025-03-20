@@ -16,13 +16,15 @@ const Login = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log(auth.accessToken);
+
   useEffect(() => {
     console.log("here's the auth bois", auth);
     if (auth.accessToken) {
       //redirect to home page
       navigate("/");
     }
-  }, auth);
+  }, [auth]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -44,8 +46,9 @@ const Login = () => {
       console.log(JSON.stringify(res?.data));
       const accessToken = res?.data.accessToken;
       const roles = res?.data.roles;
+      const username = res?.data.username;
       console.log(roles);
-      setAuth({ user, password, roles, accessToken });
+      setAuth({ username, password, roles, accessToken });
       setUser("");
       setPassword("");
 
