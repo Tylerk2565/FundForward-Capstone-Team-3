@@ -22,7 +22,7 @@ const Login = () => {
     console.log("here's the auth bois", auth);
     if (auth.accessToken) {
       //redirect to home page
-      navigate("/profile");
+      navigate("/");
     }
   }, [auth]);
 

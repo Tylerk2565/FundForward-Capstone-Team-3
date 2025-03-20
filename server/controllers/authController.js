@@ -23,7 +23,7 @@ const handleLogin = async (req, res) => {
     console.log(foundUser);
 
     const [roleRows] = await connection.query(
-        `SELECT r.role_value FROM roles r
+        `SELECT r.role_name FROM roles r
         JOIN user_roles ur ON r.id = ur.role_id
         WHERE ur.user_id = ?
         `,
@@ -31,7 +31,7 @@ const handleLogin = async (req, res) => {
     )
     console.log(roleRows)
 
-    const roles = roleRows.map(row => row.role_value)
+    const roles = roleRows.map(row => row.role_name)
     console.log(roles)
 
     // evaluate password

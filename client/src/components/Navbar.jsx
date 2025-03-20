@@ -10,6 +10,8 @@ const Navbar = () => {
 
   const isLoggedIn = auth?.username || auth?.accessToken;
 
+  const isAdmin = auth?.roles?.includes("Admin");
+
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   }
@@ -85,7 +87,17 @@ const Navbar = () => {
                 Volunteer
               </NavLink>
             </li>
-            <li>
+            {isAdmin ? (
+              <li>
+                <NavLink
+                  className="block text-sm px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-100 w-full text-center"
+                  to="/admin-messages"
+                >
+                  Admin
+                </NavLink>
+              </li> ) : (
+                <>
+              <li>
               <NavLink
                 className="block text-sm px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-100 w-full text-center"
                 to="/contact"
@@ -93,6 +105,9 @@ const Navbar = () => {
                 Contact
               </NavLink>
             </li>
+            </>
+            )}
+            
             <li>
               <NavLink
                 className="block text-sm px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-100 w-full text-center"
@@ -142,12 +157,24 @@ const Navbar = () => {
 
         {/* Right Links */}
         <div className="hidden md:flex items-center space-x-4">
-          <NavLink
-            className="relative px-3 py-2 rounded transition duration-300 ease-in-out hover:bg-gray-100"
-            to="/contact"
-          >
-            Contact
-          </NavLink>
+          {isAdmin ? (
+            <NavLink
+              className="relative px-3 py-2 rounded transition duration-300 ease-in-out hover:bg-gray-100"
+              to="/admin-messages"
+            >
+              Admin
+            </NavLink>
+          ) : (
+            <>
+              <NavLink
+                className="relative px-3 py-2 rounded transition duration-300 ease-in-out hover:bg-gray-100"
+                to="/contact"
+              >
+                Contact
+              </NavLink>
+            </>
+          )}
+
           <NavLink
             className="relative px-3 py-2 rounded transition duration-300 ease-in-out hover:bg-gray-100"
             to="/about"
