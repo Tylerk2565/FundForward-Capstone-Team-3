@@ -16,7 +16,7 @@ const Home = () => {
   const navigate = useNavigate();
   const { auth } = useAuth();
   const handleGetStarted = () => {
-    if (auth?.user) {
+    if (auth?.username) {
       navigate("/quiz");
     } else {
       setShowLoginModal(true);

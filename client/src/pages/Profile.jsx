@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ProjectSection from "../components/ProjectSection";
+import useLogout from "../hooks/useLogout";
 
 const Profile = () => {
   const [user, setUser] = useState({
@@ -54,6 +55,9 @@ const Profile = () => {
     setSavedProjects(savedProjects.filter((project) => project.id !== id));
   };
 
+  // Logout function from hook
+  const logout = useLogout();
+
   return (
     <div className="bg-gray-100 min-h-screen py-12 px-6">
       {/* Profile Header */}
@@ -90,6 +94,16 @@ const Profile = () => {
         description="Get involved and make a difference."
         projects={volunteerProjects}
       />
+
+      {/* Logout Button */}
+      <div className="flex flex-col justify-end items-center p-6 mt-auto">
+        <button
+          onClick={logout}
+          className="w-full max-w-xs bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition duration-300"
+        >
+          Log Out
+        </button>
+      </div>
     </div>
   );
 };
