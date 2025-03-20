@@ -1,50 +1,32 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { FaCheck, FaReply, FaTrashAlt, FaBookmark } from "react-icons/fa";
 
 const AdminMessages = () => {
-  // Dummy data for messages
-  const dummyMessages = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "johndoe@example.com",
-      message:
-        "I love your service! I would love to see more features in the future, especially a dark mode option.",
-      date: "2025-03-19T14:20:00Z",
-      isRead: false,
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "janesmith@example.com",
-      message:
-        "Great website! It was easy to use and the products are fantastic. Keep up the good work!",
-      date: "2025-03-18T10:45:00Z",
-      isRead: false,
-    },
-    {
-      id: 3,
-      name: "Mark Brown",
-      email: "markbrown@example.com",
-      message:
-        "I encountered a bug while trying to log in. Could you fix it as soon as possible? Thanks.",
-      date: "2025-03-17T16:30:00Z",
-      isRead: true,
-    },
-  ];
-
-  const [messages, setMessages] = useState(dummyMessages);
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
 
-  useEffect(() => {
-    setLoading(false);
-  }, []);
+  const getMessages = async () => {
+    try {
+      setLoading(true);
+      setError(null); // Reset error state
+      console.log("Fetching messages...");
+      const res = await axios.get("http://localhost:3000/contactForm");
+      console.log("Messages fetched:", res.data);
+      setMessages(res.data);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      setError("Error fetching messages");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // Filtering messages
-  const filteredMessages =
-    filter === "unread" ? messages.filter((msg) => !msg.isRead) : messages;
+  useEffect(() => {
+    getMessages();
+  }, []);
 
   const handleDelete = (id) => {
     setMessages(messages.filter((msg) => msg.id !== id));
@@ -63,6 +45,8 @@ const AdminMessages = () => {
   const toggleFilter = (status) => {
     setFilter(status);
   };
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -120,8 +104,8 @@ const AdminMessages = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredMessages.length > 0 ? (
-                filteredMessages.map((msg) => (
+              {messages.length > 0 ? (
+                messages.map((msg) => (
                   <tr
                     key={msg.id}
                     className={`border-b hover:bg-gray-100 ${
@@ -131,15 +115,15 @@ const AdminMessages = () => {
                     <td className="py-4 px-6">{msg.name}</td>
                     <td className="py-4 px-6">{msg.email}</td>
                     <td className="py-4 px-6 text-ellipsis overflow-hidden max-w-xs">
-                      {msg.message.length > 100
-                        ? `${msg.message.substring(0, 100)}...`
-                        : msg.message}
+                      {msg.comment.length > 100
+                        ? `${msg.comment.substring(0, 100)}...`
+                        : msg.comment}
                     </td>
                     <td className="py-4 px-6">
                       {new Date(msg.date).toLocaleDateString()}
                     </td>
                     <td className="py-4 px-6 flex gap-3">
-                      {!msg.isRead && (
+                      {/* {!msg.isRead && (
                         <button
                           onClick={() => handleMarkAsRead(msg.id)}
                           className="text-green-500 hover:text-green-700 flex items-center"
@@ -147,7 +131,7 @@ const AdminMessages = () => {
                           <FaCheck className="mr-1" />
                           Mark as Read
                         </button>
-                      )}
+                      )} */}
                       <button
                         onClick={() => handleReply(msg.id)}
                         className="text-blue-500 hover:text-blue-700 flex items-center"
