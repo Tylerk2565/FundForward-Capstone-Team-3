@@ -10,7 +10,7 @@ const Fundraisers = () => {
   const [searchTerm, setSearchTerm] = useState(""); // Default search term
   const { auth } = useAuth();
 
-  const loggedInUser = auth?.username // Adjust based on auth method
+  const loggedInUser = auth?.username; // Adjust based on auth method
 
   const searchFundraisers = async (query) => {
     try {
@@ -36,34 +36,31 @@ const Fundraisers = () => {
     }
   };
 
+  // Function to handle saving a fundraiser
   const handleSave = async (proj) => {
-    if (!loggedInUser) {
-        alert("You must be logged in to save fundraisers.");
-        return;
-    }
-
     console.log("Saving fundraiser:", proj.title);
 
     try {
-        const saveData = {
-            post_id: proj.id,
-            username: loggedInUser, // Use actual logged-in user
-            post_desc: proj.summary, // Save the summary as the description
-            post_img: proj.image?.imagelink.find((img) => img.size === "medium")?.url || proj.image.imagelink[0].url
-        };
+      const saveData = {
+        post_id: proj.id,
+        username: loggedInUser, // Use actual logged-in user
+        post_desc: proj.summary, // Save the summary as the description
+        post_img:
+          proj.image?.imagelink.find((img) => img.size === "medium")?.url ||
+          proj.image.imagelink[0].url,
+      };
 
-        const response = await axios.post("http://localhost:3000/save", saveData, {
-            headers: { "Content-Type": "application/json" },
-        });
+      const response = await axios.post("http://localhost:3000/save", saveData, {
+        headers: { "Content-Type": "application/json" },
+      });
 
-        console.log("Fundraiser saved:", response.data);
-        alert("Fundraiser saved successfully!");
+      console.log("Fundraiser saved:", response.data);
+      alert("Fundraiser saved successfully!");
     } catch (error) {
-        console.error("Error saving fundraiser:", error.response?.data || error.message);
-        alert("Failed to save fundraiser.");
+      console.error("Error saving fundraiser:", error.response?.data || error.message);
+      alert("Failed to save fundraiser.");
     }
-};
-
+  };
 
   useEffect(() => {
     searchFundraisers(searchTerm); // Fetch default projects on load
@@ -74,20 +71,14 @@ const Fundraisers = () => {
     searchFundraisers(searchTerm);
   };
 
-  // Function to handle saving a project
-  const handleSave = (project) => {
-    // need to implement later
-    alert(`Project saved: ${project.title}`);
-  };
-
   return (
     <div className="bg-gray-100 min-h-screen">
-      <motion.div 
-      className="max-w-7xl mx-auto p-6"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-    >
+      <motion.div
+        className="max-w-7xl mx-auto p-6"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         {/* Introduction Section */}
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-green-600">
@@ -103,10 +94,7 @@ const Fundraisers = () => {
         </div>
 
         {/* Search Form */}
-        <form
-          onSubmit={handleSearch}
-          className="flex items-center justify-center gap-4 mb-8"
-        >
+        <form onSubmit={handleSearch} className="flex items-center justify-center gap-4 mb-8">
           <input
             type="text"
             placeholder="Search for fundraisers..."
@@ -125,52 +113,44 @@ const Fundraisers = () => {
         </form>
 
         {/* Loading State */}
-        {loading && (
-          <p className="text-center text-gray-500 text-lg">
-            Loading fundraisers...
-          </p>
-        )}
+        {loading && <p className="text-center text-gray-500 text-lg">Loading fundraisers...</p>}
 
-      {/* Display Projects with Staggered Fade-in & Slide-up Animation */}
-      {!loading && projects.length > 0 ? (
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
-          initial={{ opacity: 0, y: 50 }} // Grid slides up
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", staggerChildren: 0.2 }} // Stagger children
-        >
-          {projects.map((proj, index) => (
-            <motion.div
-              key={proj.id}
-              className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl 
+        {/* Display Projects with Staggered Fade-in & Slide-up Animation */}
+        {!loading && projects.length > 0 ? (
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+            initial={{ opacity: 0, y: 50 }} // Grid slides up
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut", staggerChildren: 0.2 }} // Stagger children
+          >
+            {projects.map((proj, index) => (
+              <motion.div
+                key={proj.id}
+                className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl 
                 hover:scale-105 transition-all duration-300 transform"
-              initial={{ opacity: 0, y: 50 }} // Cards slide up
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }} // Staggered appearance
-            >
-              <div className="relative">
-                {proj.image?.imagelink && proj.image.imagelink.length > 0 && (
-                  <img
-                    src={
-                      proj.image.imagelink.find((img) => img.size === "medium")
-                        ?.url || proj.image.imagelink[0].url
-                    }
-                    alt={proj.title}
-                    className="w-full aspect-[4/3] object-cover rounded-lg transition-transform 
+                initial={{ opacity: 0, y: 50 }} // Cards slide up
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }} // Staggered appearance
+              >
+                <div className="relative">
+                  {proj.image?.imagelink && proj.image.imagelink.length > 0 && (
+                    <img
+                      src={
+                        proj.image.imagelink.find((img) => img.size === "medium")?.url ||
+                        proj.image.imagelink[0].url
+                      }
+                      alt={proj.title}
+                      className="w-full aspect-[4/3] object-cover rounded-lg transition-transform 
                       duration-500 hover:scale-105"
                     />
                   )}
                 </div>
-                <h2 className="text-xl font-semibold mt-4 text-gray-800">
-                  {proj.title}
-                </h2>
+                <h2 className="text-xl font-semibold mt-4 text-gray-800">{proj.title}</h2>
                 <p className="text-gray-600 text-sm mt-2">
                   {proj.summary.split(" ").slice(0, 20).join(" ")}
                   {proj.summary.split(" ").length > 20 ? "..." : ""}
                 </p>
-                <p className="text-green-500 text-sm mt-2 font-medium">
-                  {proj.country}
-                </p>
+                <p className="text-green-500 text-sm mt-2 font-medium">{proj.country}</p>
 
                 {/* Progress Bar */}
                 <div className="mt-4">
@@ -181,14 +161,13 @@ const Fundraisers = () => {
                     ></div>
                   </div>
                   <p className="text-sm mt-1 text-gray-500">
-                    {Math.round((proj.funding / proj.goal) * 100)}% of goal
-                    reached
+                    {Math.round((proj.funding / proj.goal) * 100)}% of goal reached
                   </p>
                 </div>
 
                 {/* Bookmark Icon for Save */}
                 <FaBookmark
-                  onClick={() => handleSave(project)}
+                  onClick={() => handleSave(proj)}
                   className="absolute bottom-4 right-4 text-2xl cursor-pointer transition-all duration-300 hover:text-green-600"
                 />
 
@@ -198,31 +177,29 @@ const Fundraisers = () => {
                   rel="noopener noreferrer"
                   className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg 
                   hover:bg-green-600 transition duration-200"
-              >
-                View Project
-              </a>
-              <button 
-                className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg 
-                  hover:bg-green-600 transition duration-200 m-1" 
-                onClick={() => handleSave(proj)}
-              >
-                Save
-              </button>
-            </motion.div>
-          ))}
-        </motion.div>
-      ) : (
-        !loading && (
-          <p className="text-center text-gray-500 text-lg">
-            No projects found. Try searching for another cause!
-          </p>
-        )
-      )}
-    </motion.div>
+                >
+                  View Project
+                </a>
+                <button
+                  className="mt-6 inline-block bg-green-500 text-white px-6 py-3 rounded-lg 
+                  hover:bg-green-600 transition duration-200 m-1"
+                  onClick={() => handleSave(proj)}
+                >
+                  Save
+                </button>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          !loading && <p className="text-center text-gray-500 text-lg">No projects found. Try searching for another cause!</p>
+        )}
+      </motion.div>
+    </div>
   );
 };
 
 export default Fundraisers;
+
 
 
 /*
