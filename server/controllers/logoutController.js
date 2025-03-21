@@ -16,7 +16,7 @@ const handleLogout = async (req, res) => {
       .query("SELECT user_id FROM refresh_tokens WHERE refresh_token = ?", [refreshToken]);
 
     if(rows.length === 0) {
-        res.clearCookie('jwt',  { httpOnly: true, sameSite:'None', secure:true ,maxAge: 24 * 60 * 60 * 1000})
+        res.clearCookie('jwt',  { httpOnly: true, sameSite:'None', secure: false })
         return res.sendStatus(204); // means successful but no content
     }
 
@@ -27,7 +27,7 @@ const handleLogout = async (req, res) => {
     console.log(deleteRefreshToken);
 
     // delete cookie from http header
-    res.clearCookie('jwt',  { httpOnly: true, sameSite:'None'}) // secure: true - only serves on https
+    res.clearCookie('jwt',  { httpOnly: true, sameSite:'None', secure: false }) // secure: true - only serves on https
     res.sendStatus(204);
     
     } catch (err) {
