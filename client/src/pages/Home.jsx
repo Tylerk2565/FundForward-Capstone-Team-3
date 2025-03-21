@@ -15,6 +15,9 @@ const Home = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const navigate = useNavigate();
   const { auth } = useAuth();
+
+  const isLoggedIn = auth?.username;
+
   const handleGetStarted = () => {
     if (auth?.username) {
       navigate("/quiz");
@@ -72,11 +75,19 @@ const Home = () => {
             volunteer, and make an impact today.
           </p>
           <div className="mt-6">
+          {isLoggedIn ? (
+            <Button
+              name={"View Profile"}
+              onClick={() => navigate("/profile")}
+              routeName={"profile"}
+            />
+          ) : (
             <Button
               name={"Register Here"}
               onClick={handleGetStarted}
               routeName={"register"}
             />
+          )}
           </div>
         </div>
       </section>
