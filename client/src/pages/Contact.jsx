@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import { Dialog } from "@headlessui/react";
 import { motion } from "framer-motion";
 
 const Contact = () => {
@@ -11,8 +10,7 @@ const Contact = () => {
   });
 
   const [submitted, setSubmitted] = useState(false);
-
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleContactForm = async () => {
     try {
@@ -30,11 +28,7 @@ const Contact = () => {
       );
       console.log(res?.data);
       setFormData({ name: "", email: "", message: "" });
-      setIsLoading(true);
-
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 3000);
+      alert("Your message has been sent successfully!");
     } catch (err) {
       console.error(err);
       if (!err?.response) {
@@ -134,39 +128,6 @@ const Contact = () => {
           <div className="w-40 h-40 bg-green-300 rounded-full animate-spin"></div>
         </motion.div>
       </div>
-
-      {isLoading && (
-        <Dialog
-          open={isLoading}
-          onClose={() => {}}
-          className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-[2px]" // Slightly dark background
-        >
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-            {" "}
-            {/* Solid white modal */}
-            <div className="w-12 h-12 mx-auto mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ color: "#2E8B57" }}
-                className="h-12 w-12"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-            <p className="text-gray-800">
-              Your message has been sent successfully!
-            </p>
-          </div>
-        </Dialog>
-      )}
     </div>
   );
 };
