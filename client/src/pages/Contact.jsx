@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { Dialog } from "@headlessui/react";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +9,8 @@ const Contact = () => {
     email: "",
     message: "",
   });
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
@@ -28,7 +31,13 @@ const Contact = () => {
       );
       console.log(res?.data);
       setFormData({ name: "", email: "", message: "" });
-      alert("Your message has been sent successfully!");
+      setIsLoading(true);
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setIsLoading(false);
+      }, 4500);
+
     } catch (err) {
       console.error(err);
       if (!err?.response) {
@@ -114,6 +123,40 @@ const Contact = () => {
               {submitted ? "Sending..." : "Send Message"}
             </button>
           </form>
+          {/* Loading Dialog */}
+                {isLoading && (
+                  <Dialog
+                  open={isLoading}
+                  onClose={() => {}}
+                  className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm"
+                >
+                  <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <motion.svg
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1, rotate: 360 }}
+                      transition={{ duration: 0.5 }}
+                      className="w-12 h-12 mx-auto mb-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <motion.path
+                        d="M5 12l5 5L20 7"
+                        stroke="green"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    </motion.svg>
+                    <p className="text-gray-800">
+                      Message Sent Successfully.
+                    </p>
+                  </div>
+                </Dialog>
+                )}
         </motion.div>
       </div>
 
