@@ -19,7 +19,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await axiosPrivate.get("https://fundforward-capstone-team-3.onrender.com/profile", {
+        const response = await axios.get("https://fundforward-capstone-team-3.onrender.com/profile", {
           headers: {
             Authorization: `Bearer ${auth.accessToken}`,
           },
