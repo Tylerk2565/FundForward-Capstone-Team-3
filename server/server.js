@@ -46,7 +46,7 @@ app.get("/featured-fundraisers", getFeaturedFundraiser);
 app.use("/results", handleResults);
 app.use("/contactForm", contactForm);
 app.use("/save", saveRoute);
-app.use("/profile", profileRoute);
+app.use("/userdata", profileRoute);
 
 app.use(errorHandler);
 // app.use("/contact"); //contactRoute

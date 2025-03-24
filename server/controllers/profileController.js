@@ -1,7 +1,7 @@
 import pool from "../config/dbConn.js";
 
 const getProfile = async (req, res) => {
-  const username = req.user;
+  const { username } = req.body;
   const connection = await pool.getConnection();
 
   try {
@@ -17,6 +17,7 @@ const getProfile = async (req, res) => {
 
     // Fetch saved projects
     const [savedProjectsRows] = await connection.query("SELECT post_id, post_title, post_desc, post_img FROM posts WHERE username = ?", [username]);
+    console.log(savedProjectsRows);
 
     res.json({
       name: user.username,

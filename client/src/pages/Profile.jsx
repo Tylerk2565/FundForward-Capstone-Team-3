@@ -19,7 +19,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await axios.get("https://fundforward-capstone-team-3.onrender.com/profile", {
+        const response = await axios.get("https://fundforward-capstone-team-3.onrender.com/userdata", {
           headers: {
             Authorization: `Bearer ${auth.accessToken}`,
           },
@@ -29,7 +29,7 @@ const Profile = () => {
           email: response.data.email,
           avatar: response.data.avatar,
         });
-        console.log(response.data.savedProjects);
+        console.log(response);
         setSavedProjects(response.data.savedProjects || []); 
       } catch (error) {
         console.error("Error fetching user profile:", error);

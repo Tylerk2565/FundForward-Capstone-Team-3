@@ -43,8 +43,8 @@ const Fundraisers = () => {
     try {
       const saveData = {
         post_id: proj.id,
-        post_title: proj.title,
         username: loggedInUser, // Use actual logged-in user
+        post_title: proj.title,
         post_desc: proj.summary, // Save the summary as the description
         post_img:
           proj.image?.imagelink.find((img) => img.size === "medium")?.url ||
@@ -52,7 +52,7 @@ const Fundraisers = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:3000/save",
+        "https://fundforward-capstone-team-3.onrender.com/save",
         saveData,
         {
           headers: { "Content-Type": "application/json" },
