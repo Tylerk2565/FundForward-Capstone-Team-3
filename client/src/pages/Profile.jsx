@@ -7,6 +7,7 @@ import { axiosPrivate } from "../api/axios";  // Import axiosPrivate
 
 const Profile = () => {
   const { auth } = useAuth();
+  console.log(auth);
 
   const [user, setUser] = useState({
     name: auth?.user?.name || "",
@@ -41,7 +42,7 @@ const Profile = () => {
   
   // Remove a saved project
   const removeSavedProject = (id) => {
-    setSavedProjects(savedProjects.filter((project) => project.post_id !== post_id)); 
+    setSavedProjects(savedProjects.filter((project) => project.id !== id)); 
   };
 
   // Logout function from hook

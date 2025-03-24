@@ -12,7 +12,7 @@ const ProjectSection = ({ title, description, projects, removeProject }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {projects.map((project, index) => (
             <div
-              key={project.post_id}
+              key={project.id}
               className={`bg-white shadow-lg rounded-lg p-4 relative transform transition-transform hover:scale-105 hover:shadow-xl 
                 ${
                   index % 2 === 0
@@ -39,7 +39,7 @@ const ProjectSection = ({ title, description, projects, removeProject }) => {
                 </a>
                 {removeProject && (
                   <button
-                    onClick={() => removeProject(project.post_id)}
+                    onClick={() => removeProject(project.id)}
                     className="bg-red-500 text-white py-1 px-3 rounded-lg text-sm hover:bg-red-700 transition"
                   >
                     Remove
