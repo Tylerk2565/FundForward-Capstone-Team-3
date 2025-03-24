@@ -18,11 +18,11 @@ const useRefreshToken = () => {
                 accessToken: response.data.accessToken,
                 username: response.data.username,
                 email: response.data.email,
-                firstname: response.data.firstname,
+                firstname: response.data.firstname
             }));
 
             // Return the new access token
-            return accessToken;
+            return response.data.accessToken;
         } catch (err) {
             console.error('Error refreshing token:', err);
             throw new Error('Token refresh failed');

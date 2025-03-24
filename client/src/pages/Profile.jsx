@@ -19,7 +19,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await axiosPrivate.get("http://localhost:3000/profile", {
+        const response = await axios.get("http://localhost:3000/profile", {
           headers: {
             Authorization: `Bearer ${auth.accessToken}`,
           },
