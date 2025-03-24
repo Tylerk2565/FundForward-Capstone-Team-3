@@ -20,6 +20,8 @@ import verifyJWT from "./middleware/verifyJWT.js";
 import getFeaturedFundraiser from "./controllers/api/getFeaturedFundraiser.js";
 import handleResults from "./controllers/api/results.js";
 import contactForm from "./routes/api/contactForm.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const PORT = process.env.PORT || 3000;
 
@@ -27,7 +29,10 @@ const app = express();
 
 app.use(cors(corsOptions));
 
-// app.use(express.static(path.join(__dirname, "../client/dist")));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, "../client/dist")));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
@@ -77,6 +82,10 @@ app.get("/api/maps/places", async (req, res) => {
     console.error("Error fetching places from Google Maps:", error);
     res.status(500).json({ error: "Error fetching places" });
   }
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 
 app.all("*", (req, res) => {
