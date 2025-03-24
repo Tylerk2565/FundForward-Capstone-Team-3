@@ -16,10 +16,10 @@ const getProfile = async (req, res) => {
     const user = userRows[0];
 
     // Fetch saved projects
-    const [savedProjectsRows] = await connection.query("SELECT post_id, post_desc, post_img FROM posts WHERE username = ?", [username]);
+    const [savedProjectsRows] = await connection.query("SELECT post_id, post_title, post_desc, post_img FROM posts WHERE username = ?", [username]);
 
     res.json({
-      name: user.name,
+      name: user.username,
       email: user.email,
       avatar: user.avatar,
       savedProjects: savedProjectsRows,

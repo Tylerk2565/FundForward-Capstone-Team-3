@@ -13,13 +13,15 @@ const handleLogin = async (req, res) => {
 
     try {
         const [userRows] = await connection
-    .query("SELECT id, username, password FROM users WHERE username = ?", [user]);
+    .query("SELECT id, username, password, email, firstname FROM users WHERE username = ?", [user]);
     console.log(userRows);
 
     if(userRows.length === 0) return res.status(401).send({"error": "Username or password are invalid"});
 
     const foundUser = userRows[0];
     const username = foundUser.username;
+    const email = foundUser.email;
+    const firstname = foundUser.firstname;
     console.log(foundUser);
 
     const [roleRows] = await connection.query(
@@ -52,7 +54,7 @@ const handleLogin = async (req, res) => {
                 "roles":roles
             }},
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '1m' }
+            { expiresIn: '45m' }
         );
 
         const refreshToken = jwt.sign(
@@ -72,9 +74,14 @@ const handleLogin = async (req, res) => {
         console.log(savingRefreshToken)
 
         // send refresh token as a cookie in htttp header
-        res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
+        res.cookie('jwt', refreshToken, {
+            httpOnly: true,
+            secure: false, // Set to false for local development (when not using HTTPS)
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
+            sameSite: 'Strict',
+        });
 
-        res.json({ roles, accessToken, username }).status(201);
+        res.json({ roles, accessToken, username, email, firstname }).status(201);
     }    
     
     } catch(error) {

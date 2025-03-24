@@ -14,14 +14,16 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (auth.accessToken) {
+    if (auth.accessToken && !isLoading) {
       navigate("/");
     }
-  }, [auth]);
+  }, [auth, isLoading]);  
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true); // Show loading modal immediately
+  
     try {
       const res = await axios.post(
         "http://localhost:3000/auth",
@@ -31,13 +33,15 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      const { accessToken, roles, username } = res?.data;
-      setAuth({ username, password, roles, accessToken });
+  
+      const { accessToken, roles, username, email, firstname } = res?.data;
+      setAuth({ username, password, roles, accessToken, email, firstname });
       setUser("");
       setPassword("");
-      setIsLoading(true);
-      setTimeout(() => navigate("/"), 4500);
+  
+      setTimeout(() => navigate("/"), 4500); // Redirect after 4.5 seconds
     } catch (err) {
+      setIsLoading(false); // Hide modal on error
       if (!err?.response) {
         setError("No server response");
       } else if (err.response.status === 409) {
@@ -47,6 +51,7 @@ const Login = () => {
       }
     }
   };
+  
 
   return (
     <div className="flex min-h-screen bg-gray-100">

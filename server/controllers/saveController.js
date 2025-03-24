@@ -6,7 +6,7 @@ dotenv.config();
 // Get a connection from the pool
 
 const handleSavePost = async (req, res) => {
-  const { post_id, username, post_desc, post_img } = req.body; // Extract data from request
+  const { post_id, post_title, username, post_desc, post_img } = req.body; // Extract data from request
 
   try {
     const connection = await pool.getConnection();
@@ -20,7 +20,7 @@ const handleSavePost = async (req, res) => {
 
     // Check if the project is already saved by the user
     const [existingProject] = await connection.query(
-      `SELECT * FROM post WHERE post_id = ? AND username = ?`,
+      `SELECT * FROM posts WHERE post_id = ? AND username = ?`,
       [post_id, username]
     );
 
@@ -31,8 +31,8 @@ const handleSavePost = async (req, res) => {
     }
 
     // Insert the post (status defaults to 'pending')
-    const query = `INSERT INTO posts (post_id, username, post_desc, post_img) VALUES (?, ?, ?, ?)`;
-    const values = [post_id, username, post_desc || null, post_img];
+    const query = `INSERT INTO posts (post_id, post_title, username, post_desc, post_img) VALUES (?, ?, ?, ?, ?)`;
+    const values = [post_id, post_title, username, post_desc || null, post_img];
 
     const [result] = await connection.query(query, values);
 

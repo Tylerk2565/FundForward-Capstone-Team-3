@@ -3,6 +3,7 @@ import ProjectSection from "../components/ProjectSection";
 import useLogout from "../hooks/useLogout";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
+import { axiosPrivate } from "../api/axios";  // Import axiosPrivate
 
 const Profile = () => {
   const { auth } = useAuth();
@@ -18,7 +19,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/profile", {
+        const response = await axiosPrivate.get("http://localhost:3000/profile", {
           headers: {
             Authorization: `Bearer ${auth.accessToken}`,
           },
@@ -28,6 +29,7 @@ const Profile = () => {
           email: response.data.email,
           avatar: response.data.avatar,
         });
+        console.log(response.data.savedProjects);
         setSavedProjects(response.data.savedProjects || []); 
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -39,7 +41,7 @@ const Profile = () => {
   
   // Remove a saved project
   const removeSavedProject = (id) => {
-    setSavedProjects(savedProjects.filter((project) => project.id !== id));
+    setSavedProjects(savedProjects.filter((project) => project.post_id !== post_id)); 
   };
 
   // Logout function from hook
@@ -55,8 +57,9 @@ const Profile = () => {
           className="w-20 h-20 rounded-full border-2 border-blue-500"
         />
         <div>
-          <h2 className="text-2xl font-bold">{user.name}</h2>
-          <p className="text-gray-600">{user.email}</p>
+          <h2 className="text-2xl font-bold">{auth?.username}</h2>
+          <p className="text-gray-600">Hello, {auth?.firstname}</p>
+          <p className="text-gray-600">{auth?.email}</p>
         </div>
       </div>
 
