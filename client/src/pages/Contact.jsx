@@ -18,7 +18,7 @@ const Contact = () => {
   const handleContactForm = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/contactForm",
+        "https://fundforward-capstone-team-3.onrender.com/contactForm",
         JSON.stringify({
           name: formData.name,
           email: formData.email,

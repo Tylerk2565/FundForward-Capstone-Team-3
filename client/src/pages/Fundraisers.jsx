@@ -17,7 +17,7 @@ const Fundraisers = () => {
       setLoading(true);
       console.log("Searching fundraisers for:", query);
       const response = await axios.get(
-        `http://localhost:3000/api/fundraiser?q=${query}`,
+        `https://fundforward-capstone-team-3.onrender.com/api/fundraiser?q=${query}`,
         {
           headers: { Accept: "application/json" },
         }

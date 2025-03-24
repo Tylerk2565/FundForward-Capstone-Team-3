@@ -7,7 +7,7 @@ const useRefreshToken = () => {
     const refresh = async () => {
         try {
             // Sending request to the backend to refresh the token
-            const response = await axios.get('http://localhost:3000/refresh', {
+            const response = await axios.get('https://fundforward-capstone-team-3.onrender.com/refresh', {
                 withCredentials: true, // Sends cookies with the request
             });
 

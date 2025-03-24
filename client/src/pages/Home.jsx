@@ -42,7 +42,7 @@ const Home = () => {
     const fetchFeaturedProjects = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/featured-fundraisers"
+          "https://fundforward-capstone-team-3.onrender.com/featured-fundraisers"
         );
         setProjects(response.data?.data?.projects?.project || []);
       } catch (error) {

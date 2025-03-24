@@ -89,7 +89,7 @@ const Register = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/register",
+        "https://fundforward-capstone-team-3.onrender.com/register",
         { user, pwd: password, email, firstname: fname, lastname: lname },
         { headers: { "Content-Type": "application/json" }, Credentials: true }
       );

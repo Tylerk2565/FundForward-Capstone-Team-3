@@ -42,7 +42,7 @@ const Results = () => {
         }
 
         const searchQuery = CATEGORY_MAPPING[topCategory] || "general";
-        const url = `http://localhost:3000/api/fundraiser?&q=${encodeURIComponent(
+        const url = `https://fundforward-capstone-team-3.onrender.com/api/fundraiser?&q=${encodeURIComponent(
           searchQuery
         )}`;
 

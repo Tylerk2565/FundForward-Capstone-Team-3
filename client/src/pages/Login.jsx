@@ -26,7 +26,7 @@ const Login = () => {
   
     try {
       const res = await axios.post(
-        "http://localhost:3000/auth",
+        "https://fundforward-capstone-team-3.onrender.com/auth",
         JSON.stringify({ user, pwd: password }),
         {
           headers: { "Content-Type": "application/json" },

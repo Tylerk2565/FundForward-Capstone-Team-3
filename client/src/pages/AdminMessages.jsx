@@ -13,7 +13,7 @@ const AdminMessages = () => {
       setLoading(true);
       setError(null); // Reset error state
       console.log("Fetching messages...");
-      const res = await axios.get("http://localhost:3000/contactForm");
+      const res = await axios.get("https://fundforward-capstone-team-3.onrender.com/contactForm");
       console.log("Messages fetched:", res.data);
       setMessages(res.data);
     } catch (error) {
@@ -30,7 +30,7 @@ const AdminMessages = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/contactForm/${id}`);
+      await axios.delete(`https://fundforward-capstone-team-3.onrender.com/contactForm/${id}`);
       setMessages(messages.filter((msg) => msg.id !== id));
     } catch (error) {
       console.error("Error deleting message:", error);
@@ -40,7 +40,7 @@ const AdminMessages = () => {
 
   const handleMarkAsRead = async (id) => {
     try {
-      await axios.patch(`http://localhost:3000/contactForm/markAsRead/${id}`);
+      await axios.patch(`https://fundforward-capstone-team-3.onrender.com/contactForm/markAsRead/${id}`);
       setMessages(
         messages.map((msg) => (msg.id === id ? { ...msg, isRead: true } : msg))
       );
