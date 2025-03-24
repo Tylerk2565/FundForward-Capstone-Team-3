@@ -18,6 +18,8 @@ const Home = () => {
 
   const isLoggedIn = auth?.username;
 
+  console.log(auth);
+
   const handleGetStarted = () => {
     if (auth?.username) {
       navigate("/quiz");

@@ -1,58 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProjectSection from "../components/ProjectSection";
 import useLogout from "../hooks/useLogout";
+import useAuth from "../hooks/useAuth";
+import axios from "axios";
+import { axiosPrivate } from "../api/axios";  // Import axiosPrivate
 
 const Profile = () => {
+  const { auth } = useAuth();
+
   const [user, setUser] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    avatar: "#",
+    name: auth?.user?.name || "",
+    email: auth?.user?.email || "",
+    avatar: "",
   });
 
-  const [savedProjects, setSavedProjects] = useState([
-    {
-      id: 1,
-      title: "Clean Water Initiative",
-      summary:
-        "Providing access to clean and safe drinking water for rural communities.",
-      image: "#",
-      projectLink: "#",
-    },
-    {
-      id: 2,
-      title: "Education for All",
-      summary:
-        "Building schools and funding education for underprivileged children.",
-      image: "#",
-      projectLink: "#",
-    },
-  ]);
+  const [savedProjects, setSavedProjects] = useState([]);
 
-  const [donatedProjects, setDonatedProjects] = useState([
-    {
-      id: 3,
-      title: "Disaster Relief Fund",
-      summary:
-        "Helping families recover from natural disasters with emergency aid.",
-      image: "#",
-      projectLink: "#",
-    },
-  ]);
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axiosPrivate.get("http://localhost:3000/profile", {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        });
+        setUser({
+          name: response.data.username,
+          email: response.data.email,
+          avatar: response.data.avatar,
+        });
+        console.log(response.data.savedProjects);
+        setSavedProjects(response.data.savedProjects || []); 
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+    fetchUserProfile();
+  }, [auth.accessToken]);
 
-  const [volunteerProjects, setVolunteerProjects] = useState([
-    {
-      id: 4,
-      title: "Community Garden Initiative",
-      summary:
-        "Creating green spaces and providing fresh produce for local communities.",
-      image: "#",
-      projectLink: "#",
-    },
-  ]);
-
+  
   // Remove a saved project
   const removeSavedProject = (id) => {
-    setSavedProjects(savedProjects.filter((project) => project.id !== id));
+    setSavedProjects(savedProjects.filter((project) => project.post_id !== post_id)); 
   };
 
   // Logout function from hook
@@ -68,8 +57,9 @@ const Profile = () => {
           className="w-20 h-20 rounded-full border-2 border-blue-500"
         />
         <div>
-          <h2 className="text-2xl font-bold">{user.name}</h2>
-          <p className="text-gray-600">{user.email}</p>
+          <h2 className="text-2xl font-bold">{auth?.username}</h2>
+          <p className="text-gray-600">Hello, {auth?.firstname}</p>
+          <p className="text-gray-600">{auth?.email}</p>
         </div>
       </div>
 
@@ -81,19 +71,19 @@ const Profile = () => {
         removeProject={removeSavedProject}
       />
 
-      {/* Donated Projects Section */}
+      {/* Donated Projects Section
       <ProjectSection
         title="Projects You Donated To"
         description="See the impact of your contributions."
         projects={donatedProjects}
       />
 
-      {/* Volunteer Projects Section */}
+      Volunteer Projects Section
       <ProjectSection
         title="Projects You Want to Volunteer At"
         description="Get involved and make a difference."
         projects={volunteerProjects}
-      />
+      /> */}
 
       {/* Logout Button */}
       <div className="flex flex-col justify-end items-center p-6 mt-auto">

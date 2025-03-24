@@ -43,6 +43,7 @@ const Fundraisers = () => {
     try {
       const saveData = {
         post_id: proj.id,
+        post_title: proj.title,
         username: loggedInUser, // Use actual logged-in user
         post_desc: proj.summary, // Save the summary as the description
         post_img:

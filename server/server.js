@@ -14,6 +14,7 @@ import logoutRoute from "./routes/logout.js";
 import errorHandler from "./middleware/errorHandler.js";
 import refreshRoute from "./routes/refresh.js";
 import saveRoute from "./routes/save.js";
+import profileRoute from "./routes/profile.js";
 import pool from "./config/dbConn.js";
 import verifyJWT from "./middleware/verifyJWT.js";
 import getFeaturedFundraiser from "./controllers/api/getFeaturedFundraiser.js";
@@ -40,6 +41,7 @@ app.get("/featured-fundraisers", getFeaturedFundraiser);
 app.use("/results", handleResults);
 app.use("/contactForm", contactForm);
 app.use("/save", saveRoute);
+app.use("/profile", profileRoute);
 
 app.use(errorHandler);
 // app.use("/contact"); //contactRoute

@@ -4,9 +4,10 @@ dotenv.config();
 
 const verifyJWT = (req, res, next) => {
     const authHeader = req.headers.authorization || req.headers.Authorization;
+    console.log(authHeader);
 
-    if(!authHeader?.startsWith('Bearer ')) {
-        return res.send(401).json({ message: 'Authorization header missing or malformed.' });
+    if (!authHeader?.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'Authorization header missing or malformed.' });
     }
     // console.log(authHeader); // Bearer token
     const token = authHeader.split(' ')[1];
@@ -15,8 +16,8 @@ const verifyJWT = (req, res, next) => {
         token,
         process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
-            if(err) {
-                console.error("JWT verification error:", err.message); 
+            if (err) {
+                console.error("JWT verification error:", err.message);
                 return res.status(403).json({ message: 'Invalid or expired token.' });
             }; // invalid token
             
