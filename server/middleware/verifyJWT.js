@@ -4,7 +4,6 @@ dotenv.config();
 
 const verifyJWT = (req, res, next) => {
     const authHeader = req.headers.authorization || req.headers.Authorization;
-    console.log(authHeader);
 
     if(!authHeader?.startsWith('Bearer ')) {
         return res.send(401).json({ message: 'Authorization header missing or malformed.' });

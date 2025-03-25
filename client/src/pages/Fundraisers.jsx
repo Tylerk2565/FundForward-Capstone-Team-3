@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { FaBookmark } from "react-icons/fa";
+import { Dialog } from "@headlessui/react";
 import useAuth from "../hooks/useAuth";
 
 const Fundraisers = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState(""); // Default search term
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+  const [saveSuccess, setSaveSuccess] = useState(false);
   const { auth } = useAuth();
 
   const loggedInUser = auth?.username; // Adjust based on auth method
@@ -39,6 +43,9 @@ const Fundraisers = () => {
   // Function to handle saving a fundraiser
   const handleSave = async (proj) => {
     console.log("Saving fundraiser:", proj.title);
+    setIsSaving(true);
+    setSaveError("");
+    setSaveSuccess(false);
 
     try {
       const saveData = {
@@ -60,13 +67,20 @@ const Fundraisers = () => {
       );
 
       console.log("Fundraiser saved:", response.data);
-      alert("Fundraiser saved successfully!");
+      setSaveSuccess(true);
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, 4500);
     } catch (error) {
       console.error(
         "Error saving fundraiser:",
         error.response?.data || error.message
       );
-      alert("Failed to save fundraiser.");
+      setSaveError(
+        error.response?.data?.error || "Failed to save fundraiser."
+      );
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -223,110 +237,79 @@ const Fundraisers = () => {
           )
         )}
       </motion.div>
+
+      {/* Saving Dialog */}
+      {isSaving && (
+        <Dialog
+          open={isSaving}
+          onClose={() => {}}
+          className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm"
+        >
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 1 }}
+              className="w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full mx-auto mb-4"
+            ></motion.div>
+            <p className="text-gray-800">Saving fundraiser...</p>
+          </div>
+        </Dialog>
+      )}
+
+      {/* Save Success Dialog */}
+      {saveSuccess && (
+        <Dialog
+          open={saveSuccess}
+          onClose={() => {}}
+          className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm"
+        >
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <motion.svg
+              initial={{ scale: 0 }}
+              animate={{ scale: 1, rotate: 360 }}
+              transition={{ duration: 0.5 }}
+              className="w-12 h-12 mx-auto mb-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <motion.path
+                d="M5 12l5 5L20 7"
+                stroke="green"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 0.5 }}
+              />
+            </motion.svg>
+            <p className="text-gray-800">Fundraiser saved successfully!</p>
+          </div>
+        </Dialog>
+      )}
+
+      {/* Save Error Dialog */}
+      {saveError && (
+        <Dialog
+          open={!!saveError}
+          onClose={() => setSaveError("")}
+          className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm"
+        >
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <p className="text-red-500">{saveError}</p>
+            <button
+              onClick={() => setSaveError("")}
+              className="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition"
+            >
+              Close
+            </button>
+          </div>
+        </Dialog>
+      )}
     </div>
   );
 };
 
 export default Fundraisers;
 
-/*
-
-example response from GlobalGiving API:
-
-{
-    "success": true,
-    "data": {
-        "projects": {
-            "hasNext": true,
-            "nextProjectId": 13,
-            "project": [
-                {
-                    "id": 2,
-                    "active": false,
-                    "title": "Poor women micro-enterprise development-Indonesia",
-                    "summary": "Helping 150 poor Indonesian women in 14 villages to help themselves out of poverty by running a 3-day course with their local NGO teaching basic business skills like accounting and product packaging.",
-                    "contactName": "Toby Beresford",
-                    "contactTitle": "Managing Director",
-                    "contactAddress": "MicroAid Projects Charity",
-                    "contactAddress2": "Unit 11 DRCA, Business Centre",
-                    "contactCity": "London",
-                    "contactState": "United Kingdom",
-                    "contactPostal": "SW11 5HD",
-                    "contactCountry": "United Kingdom",
-                    "contactUrl": "http://www.microaidprojects.org.uk",
-                    "projectLink": "https://www.globalgiving.org/projects/poor-women-micro-enterprise-development-indonesia/",
-                    "progressReportLink": "https://www.globalgiving.org/projects/poor-women-micro-enterprise-development-indonesia/updates/",
-                    "themeName": "Economic Growth",
-                    "country": "Indonesia",
-                    "iso3166CountryCode": "ID",
-                    "region": "Asia and Oceania",
-                    "goal": 3046,
-                    "funding": 3071,
-                    "remaining": 0,
-                    "numberOfDonations": 32,
-                    "status": "funded",
-                    "need": "35 million people in Indonesia live below the poverty line with little or no income. Indonesia is a beautiful country where both Christians and Muslims live side by side. Take Murni for example, a vulnerable woman living on an income below $2 a day. In poor villages simple illnesses like diarrhea can be fatal. When a woman has an income she can pay for medical care.",
-                    "longTermImpact": "150 poor families will take the first step out of poverty.",
-                    "activities": "150 families will be trained in basic business skills.",
-                    "additionalDocumentation": "https://www.globalgiving.org/pfil/2/projdoc.doc",
-                    "imageLink": "https://www.globalgiving.org/pfil/2/pict.jpg",
-                    "imageGallerySize": 11,
-                    "approvedDate": "2003-05-16T12:57:20-04:00",
-                    "modifiedDate": "2025-03-14T15:33:31-04:00",
-                    "numberOfReports": 9,
-                    "dateOfMostRecentReport": "2007-01-04T14:30:46-05:00",
-                    "image": {
-                        "title": "Poor women micro-enterprise development-Indonesia",
-                        "imagelink": [
-                            {
-                                "url": "https://www.globalgiving.org/pfil/2/pict_grid1.jpg",
-                                "size": "small"
-                            },
-                            {
-                                "url": "https://www.globalgiving.org/pfil/2/pict_thumbnail.jpg",
-                                "size": "thumbnail"
-                            },
-                            {
-                                "url": "https://www.globalgiving.org/pfil/2/pict_med.jpg",
-                                "size": "medium"
-                            },
-                            {
-                                "url": "https://www.globalgiving.org/pfil/2/pict_grid7.jpg",
-                                "size": "large"
-                            },
-                            {
-                                "url": "https://www.globalgiving.org/pfil/2/pict_large.jpg",
-                                "size": "extraLarge"
-                            },
-                            {
-                                "url": "https://www.globalgiving.org/pfil/2/pict_original.jpg",
-                                "size": "original"
-                            }
-                        ],
-                        "id": 0
-                    },
-                    "themes": {
-                        "theme": [
-                            {
-                                "id": "ecdev",
-                                "name": "Economic Growth"
-                            }
-                        ]
-                    },
-                    "countries": {
-                        "country": [
-                            {
-                                "name": "Indonesia",
-                                "iso3166CountryCode": "ID"
-                            }
-                        ]
-                    },
-                    "type": "project"
-                }
-            ],
-            "numberFound": 46794
-        }
-    }
-}
-
-*/

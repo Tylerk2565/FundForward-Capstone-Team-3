@@ -44,6 +44,7 @@ To run the project locally, follow these steps:
 
 2. **Install dependencies:**
    ```sh
+   npm i on root folder
    cd client
    npm i
    cd ..
